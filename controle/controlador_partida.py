@@ -40,4 +40,3 @@ class ControladorPartida():
             else:
                 posicoes = [int(x) for x in self.__tela_partida.posicionar_barcos().split()]
                 self.__partida.__oceano_jogador.posicoes_barcos[contador] = posicoes    
-    def 
