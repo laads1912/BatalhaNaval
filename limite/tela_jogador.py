@@ -1,26 +1,23 @@
-class TelaPartida:
-
+class TelaJogador:
     def tela_opcoes(self):
         print("----- JOGADORES -----")
-        print("1 - Iniciar Partida")
+        print("1 - Cadastrar jogador")
         print("2 - Mostrar ranking dos jogadores")
         print("3 - Excluir jogador")
         print("0 - Retornar")
 
         opcao = input("Escolha a opção: ")
         return opcao
-    
-    def iniciar_partida(self):
-        print("-------- INICIAR PARTIDA ----------")
-        nome = input("Nome do jogador: ")
-        tamanho_oceano = input("Tamanho do oceano: ")
-        return {"nome": nome, "tamanho_oceano": tamanho_oceano}
 
-    def posicionar_barcos(self):
-        print("-------- INSIRA A POSIÇÃO DO BOTE ----------")
-        posicao = input("Posicao separado por espaço: ")
-        return posicao
+    def pegar_dados_jogador(self):
+        print("-------- DADOS JOGADOR ----------")
+        nome = input("Nome: ")
+        data_nascimento = input("Data de nascimento: ")
+        return {"nome": nome, "data_nascimento": data_nascimento}
 
+    def selecionar_jogador(self):
+        nome = input("Nome do jogador que deseja selecionar: ")
+        return nome
 
     def mostrar_jogador(self, dados_jogador):
         print("NOME: ", dados_jogador["nome"])
