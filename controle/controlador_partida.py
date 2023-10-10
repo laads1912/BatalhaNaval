@@ -8,8 +8,8 @@ from controle.controlador_sistema import ControladorSistema
 class ControladorPartida:
 
     def __init__(self, controlador_sistema):
-        self.__jogador = None
-        self.__partida = None
+        self.__jogador = Jogador("a", "b")
+        self.__partida = Partida(self.__jogador, 1)
         self.__tela_partida = TelaPartida()
         self.__controlador_sistema = controlador_sistema
         self.__pontuacao_total = 0
@@ -30,14 +30,29 @@ class ControladorPartida:
             if contador == 8:
                 break
             if contador <= 2:
-                posicoes = [int(x) for x in self.__tela_partida.posicionar_barcos().split()]
-                self.__partida.__oceano_jogador.posicoes_barcos[contador] = posicoes
+                while True:
+                    posicoes = self.__tela_partida.posicionar_barcos("Bote")
+                    if len(posicoes) == 2 and posicoes[0].isalpha() and posicoes[1].isdigit():
+                        self.__partida.add_barco_oceano(self.__partida.embarcacoes_jogador[contador], posicoes)
+                        break
+                    else:
+                        self.__tela_partida.mostrar_mensagem("Posição fornecida está no formato errado.")
             elif contador <= 4:
-                posicoes = [int(x) for x in self.__tela_partida.posicionar_barcos().split()]
-                self.__partida.__oceano_jogador.posicoes_barcos[contador] = posicoes
+                posicoes = [int(x) for x in self.__tela_partida.posicionar_barcos("Submarino").split()]
+                if len(posicoes) == 2:
+                    condicao = True
+                    for posicao in posicoes:
+                        if posicao[0].isalpha() and posicao[1].isdigit():
+                            condicao = True
+                        else:
+                            condicao = False
+                            break
+                    if condicao:
+
+                self.__partida.add_barco_oceano(self.__partida.embarcacoes_jogador[contador], posicoes)
             elif contador <= 6:
-                posicoes = [int(x) for x in self.__tela_partida.posicionar_barcos().split()]
-                self.__partida.__oceano_jogador.posicoes_barcos[contador] = posicoes
+                posicoes = [int(x) for x in self.__tela_partida.posicionar_barcos("Fragata").split()]
+                self.__partida.add_barco_oceano(self.__partida.embarcacoes_jogador[contador], posicoes)
             else:
-                posicoes = [int(x) for x in self.__tela_partida.posicionar_barcos().split()]
-                self.__partida.__oceano_jogador.posicoes_barcos[contador] = posicoes
+                posicoes = [int(x) for x in self.__tela_partida.posicionar_barcos("PortaAvioes").split()]
+                self.__partida.add_barco_oceano(self.__partida.embarcacoes_jogador[contador], posicoes)

@@ -58,3 +58,10 @@ class Partida:
     def jogador(self, jogador: Jogador):
         if isinstance(jogador, Jogador):
             self.__jogador = jogador
+
+    @property
+    def embarcacoes_jogador(self):
+        return self.__embarcacoes_jogador
+
+    def add_barco_oceano(self, barco, posicoes):
+        self.__oceano_jogador.add_barco(barco, posicoes)

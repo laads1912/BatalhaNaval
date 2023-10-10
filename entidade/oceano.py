@@ -27,3 +27,6 @@ class Oceano:
     @property
     def tiros_acertados(self):
         return self.__tiros_acertados
+
+    def add_barco(self, barco, posicoes):
+        self.__posicoes_barcos[barco] = posicoes
