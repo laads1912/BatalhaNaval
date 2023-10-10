@@ -27,6 +27,7 @@ class TelaPartida:
 
     def atirar(self):
         posicao = input("-------- INSIRA A POSIÇÃO DO TIRO ----------")
-
+        return posicao
+        
     def mostrar_mensagem(self, mensagem):
         print(mensagem)

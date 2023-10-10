@@ -7,5 +7,5 @@ class TelaSistema():
         opcao = int(input("Escolha sua opção:"))
         return opcao
     
-    def mensagem(self, texto: str):
+    def mostrar_mensagem(self, texto: str):
         return print(texto)
