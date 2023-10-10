@@ -1,5 +1,3 @@
-from entidade.jogador import Jogador
-from entidade.embarcacao import Embarcacao
 from entidade.oceano import Oceano
 from entidade.bote import Bote
 from entidade.fragata import Fragata
@@ -8,7 +6,7 @@ from entidade.submarino import Submarino
 
 
 class Partida:
-    def __init__(self, jogador: Jogador, tamanho_oceano: int):
+    def __init__(self, jogador, tamanho_oceano: int):
         self.__bote1_maquina = Bote(1)
         self.__bote2_maquina = Bote(1)
         self.__bote3_maquina = Bote(1)
@@ -47,17 +45,15 @@ class Partida:
         self.__oceano_maquina = Oceano(tamanho_oceano)
         
         self.__pontuacao = 0
-        if isinstance(jogador, Jogador):
-            self.__jogador = jogador
+        self.__jogador = jogador
 
     @property
     def jogador(self):
         return self.__jogador
 
     @jogador.setter
-    def jogador(self, jogador: Jogador):
-        if isinstance(jogador, Jogador):
-            self.__jogador = jogador
+    def jogador(self, jogador):
+        self.__jogador = jogador
 
     @property
     def embarcacoes_jogador(self):

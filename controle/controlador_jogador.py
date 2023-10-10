@@ -1,11 +1,10 @@
 from entidade.jogador import Jogador
 from limite.tela_jogador import TelaJogador
 from entidade.partida import Partida
-from controle.controlador_sistema import ControladorSistema
 
 
 class ControladorJogador:
-    def __init__(self, controlador_sistema: ControladorSistema):
+    def __init__(self, controlador_sistema):
         self.__jogadores = []
         self.__tela_jogador = TelaJogador()
         self.__controlador_sistema = controlador_sistema
