@@ -11,6 +11,8 @@ class Oceano:
         self.__posicoes_barcos = {}
         self.__tiros_realizados = []
         self.__tiros_acertados = []
+        self.__matriz_oceano_jogador = [[0] * self.__tamanho_oceano for _ in range(self.__tamanho_oceano)]
+        self.__matriz_oceano_maquina = [[0] * self.__tamanho_oceano for _ in range(self.__tamanho_oceano)]
 
     @property
     def tamanho_oceano(self):
