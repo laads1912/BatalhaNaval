@@ -18,9 +18,6 @@ class ControladorSistema:
 
     def cadastrar_jogador(self):
         self.__controlador_jogador.abre_tela()
-
-    def cadastrar_oceano(self):
-        self.__controlador_oceano.abre_tela()
     
     def finaliza_sistema(self):
         exit(0)
@@ -35,4 +32,4 @@ class ControladorSistema:
                 funcao_escolhida()
                 raise ValueError
             except ValueError:
-                self.__tela.mensagem("Valor inválido, digite um número Válido")
+                self.__tela_sistema.mostrar_mensagem("Valor inválido, digite um número Válido")

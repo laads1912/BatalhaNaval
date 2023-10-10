@@ -15,6 +15,21 @@ class ControladorPartida:
         self.__dict_posicao = {'A': 0, 'B': 1, 'C': 2, 'D': 3, 'E': 4, 'F': 5, 'G': 6, 'H': 7, 'I': 8, 'J': 9,
                                'K': 10, 'L': 11, 'M': 12, 'N': 13, 'O': 14, 'P': 15, 'Q': 16, 'R': 17, 'S': 18, 'T': 19,
                                'U': 20, 'V': 21, 'W': 22, 'X': 23, 'Y': 24, 'Z': 25}
+    
+    def abre_tela(self):
+        lista_opcoes = {1: self.iniciar_partida, 0: self.retornar}
+        
+        while True:
+            try:
+                opcao_escolhida = self.__tela_partida.tela_opcoes()
+                funcao_escolhida = lista_opcoes[opcao_escolhida]
+                funcao_escolhida()
+                raise ValueError
+            except ValueError:
+                self.__tela_partida.mostrar_mensagem("Valor inválido, digite um número Válido")    
+
+    def retornar(self):
+        self.__controlador_sistema.abre_tela()
 
     def iniciar_partida(self):
         dados = self.__tela_partida.iniciar_partida()
@@ -129,8 +144,13 @@ class ControladorPartida:
                         self.__tela_partida.mostrar_mensagem("Posição fornecida é inválida.")
                 contador += 1
 
-    def atirar(self):
-        dados = self.__tela_partida.atirar()
-        self.__tiros_realizados.append(dados)
-        dados = list(dados)
-        posicao = [self.__dict_posicao[dados[0]], int(dados[1])]
+    # def atirar(self):
+    #     dados = self.__tela_partida.atirar()
+    #     self.__tiros_realizados.append(dados)
+    #     dados = list(dados)
+    #     posicao = [self.__dict_posicao[dados[0]], int(dados[1])]
+    #     matriz = self.__partida.pegar_matriz_oceano_jogador()
+
+    #     for linha in matriz:
+    #         for coluna in matriz:
+    #             if 
