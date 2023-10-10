@@ -3,8 +3,6 @@ class TelaPartida:
     def tela_opcoes(self):
         print("----- JOGADORES -----")
         print("1 - Iniciar Partida")
-        print("2 - Mostrar ranking dos jogadores")
-        print("3 - Excluir jogador")
         print("0 - Retornar")
 
         opcao = input("Escolha a opção: ")
@@ -20,10 +18,6 @@ class TelaPartida:
         print("-------- INSIRA A POSIÇÃO DO BOTE ----------")
         posicao = input("Posicao separado por espaço: ")
         return posicao
-
-    def mostrar_jogador(self, dados_jogador):
-        print("NOME: ", dados_jogador["nome"])
-        print("DATA DE NASCIMENTO: ", dados_jogador["data_nascimento"])
 
     def mostrar_mensagem(self, mensagem):
         print(mensagem)
