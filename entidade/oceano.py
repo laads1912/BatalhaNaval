@@ -5,7 +5,7 @@ from entidade.porta_avioes import PortaAvioes
 from entidade.submarino import Submarino
 
 
-class Oceano():
+class Oceano:
     def __init__(self, tamanho_oceano: int):
         self.__tamanho_oceano = tamanho_oceano
         self.__posicoes_barcos = {}

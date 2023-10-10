@@ -25,4 +25,3 @@ class TelaJogador:
 
     def mostrar_mensagem(self, mensagem):
         print(mensagem)
-

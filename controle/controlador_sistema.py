@@ -1,14 +1,13 @@
 from limite.tela_sistema import TelaSistema
 from controle.controlador_partida import ControladorPartida
 from controle.controlador_jogador import ControladorJogador
-from controle.controlador_oceano import ControladorOceano
+
 
 class ControladorSistema:
 
     def __init__(self):
         self.__controlador_partida = ControladorPartida(self)
         self.__controlador_jogador = ControladorJogador(self)
-        self.__controlador_oceano = ControladorOceano(self)
         self.__tela_sistema = TelaSistema()
 
     def inicializa_sistema(self):
