@@ -34,4 +34,4 @@ class Oceano:
         self.__posicoes_barcos[barco] = posicoes
 
     def pegar_matriz(self):
-            return self.__matriz_oceano_jogador
+        return self.__matriz_oceano_jogador
