@@ -31,7 +31,20 @@ class Oceano:
         return self.__tiros_acertados
 
     def add_barco(self, barco, posicoes):
+        dicionario = {'A': 0, 'B': 1, 'C': 2, 'D': 3, 'E': 4, 'F': 5, 'G': 6, 'H': 7, 'I': 8, 'J': 9,
+                      'K': 10, 'L': 11, 'M': 12, 'N': 13, 'O': 14, 'P': 15, 'Q': 16, 'R': 17, 'S': 18, 'T': 19,
+                      'U': 20, 'V': 21, 'W': 22, 'X': 23, 'Y': 24, 'Z': 25}
         self.__posicoes_barcos[barco] = posicoes
+        if isinstance(posicoes, str):
+            self.__matriz_oceano_jogador[dicionario[posicoes[0]]][int(posicoes[1])] = "B"
+        else:
+            for posicao in posicoes:
+                if isinstance(barco, Submarino):
+                    self.__matriz_oceano_jogador[dicionario[posicao[0]]][int(posicao[1])] = "S"
+                elif isinstance(barco, Fragata):
+                    self.__matriz_oceano_jogador[dicionario[posicao[0]]][int(posicao[1])] = "F"
+                else:
+                    self.__matriz_oceano_jogador[dicionario[posicao[0]]][int(posicao[1])] = "P"
 
     def pegar_matriz(self):
         return self.__matriz_oceano_jogador
