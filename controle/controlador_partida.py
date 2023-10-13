@@ -7,11 +7,13 @@ from entidade.oceano import Oceano
 class ControladorPartida:
 
     def __init__(self, controlador_sistema):
+        self.__final_partida = "1"
         self.__jogador = Jogador("a", "b")
         self.__partida = Partida(self.__jogador, 1)
         self.__tela_partida = TelaPartida()
         self.__controlador_sistema = controlador_sistema
         self.__pontuacao_total = 0
+        self.__tiros_realizados = []
         self.__dict_posicao = {'A': 0, 'B': 1, 'C': 2, 'D': 3, 'E': 4, 'F': 5, 'G': 6, 'H': 7, 'I': 8, 'J': 9,
                                'K': 10, 'L': 11, 'M': 12, 'N': 13, 'O': 14, 'P': 15, 'Q': 16, 'R': 17, 'S': 18, 'T': 19,
                                'U': 20, 'V': 21, 'W': 22, 'X': 23, 'Y': 24, 'Z': 25}
@@ -38,9 +40,64 @@ class ControladorPartida:
         if isinstance(self.__jogador, Jogador) and isinstance(tamanho_oceano, int):
             self.__partida = Partida(self.__jogador, tamanho_oceano)
             self.add_embarcacoes()
+            self.continuar_partida()
+    
+    def continuar_partida(self):
+        while self.__final_partida == "0":
+            self.mostrar_oceano_jogador()
+            self.mostrar_oceano_maquina()
+            self.atirar()
+
 
     def pontuacao_total(self):
         self.__tela_partida.mostrar_mensagem("Sua pontuacao é: " + str(self.__pontuacao_total) + " pontos")
+
+    def atirar(self):
+        dados = self.__tela_partida.atirar()
+        condicao = 0
+        while True:
+            if len(dados) == 2 and dados[0].upper().isalpha and dados[1].isalnum():
+                break
+            else:
+                self.__tela_partida.mostrar_mensagem("Valor inválido")
+                dados = self.__tela_partida.atirar()          
+        self.__tiros_realizados.append(dados)
+        dados = list(dados)
+        posicao = [self.__dict_posicao[dados[0]], int(dados[1])]
+        matriz = self.__partida.pegar_matriz_oceano_maquina()
+        posicao_tiro_matriz = matriz[posicao[0]][posicao[1]]
+        if posicao_tiro_matriz == "B":
+            self.__tela_partida.mostrar_mensagem("Você Acertou um Barco")
+            matriz[posicao[0]][posicao[1]] = "O"
+        elif posicao_tiro_matriz == "S":
+            self.__tela_partida.mostrar_mensagem("Você Acertou um Submarino")
+            matriz[posicao[0]][posicao[1]] = "O"
+        elif posicao_tiro_matriz == "F":
+            self.__tela_partida.mostrar_mensagem("Você Acertou um Fragata")
+            matriz[posicao[0]][posicao[1]] = "O"
+        elif posicao_tiro_matriz == "P":
+            self.__tela_partida.mostrar_mensagem("Você Acertou um Porta-Aviões")
+            matriz[posicao[0]][posicao[1]] = "O"
+        else:
+            self.__tela_partida.mostrar_mensagem("Errou")
+
+    
+    def mostrar_oceano_jogador(self):
+        contador = 0
+        matriz = self.__partida.pegar_matriz_oceano_jogador()
+        self.__tela_partida.mostrar_legenda_oceano("JOGADOR")
+        self.__tela_partida.mostrar_mensagem("  12345678910")
+        for linha in matriz:
+            self.__tela_partida.mostrar_mensagem(self.__dict_posicao[contador] + linha)
+
+    def mostrar_oceano_maquina(self):
+        contador = 0
+        matriz = self.__partida.pegar_matriz_oceano_maquina()
+        self.__tela_partida.mostrar_legenda_oceano("MAQUINA")
+        self.__tela_partida.mostrar_mensagem("  12345678910")
+        for linha in matriz:
+            self.__tela_partida.mostrar_mensagem(self.__dict_posicao[contador] + linha)
+
 
     def add_bote(self):
         contador = 0
@@ -189,9 +246,13 @@ class ControladorPartida:
                 self.__tela_partida.mostrar_mensagem("Posição fornecida é inválida.")
 
     def add_embarcacoes(self):
+        self.mostrar_oceano_jogador()
         self.add_bote()
+        self.mostrar_oceano_jogador()
         self.add_submarino()
+        self.mostrar_oceano_jogador()
         self.add_fragata()
+        self.mostrar_oceano_jogador()
         self.add_porta_avioes()
 
     # def add_embarcacoes(self):
@@ -331,14 +392,3 @@ class ControladorPartida:
     #                 else:
     #                     self.__tela_partida.mostrar_mensagem("Posição fornecida é inválida.")
     #             contador += 1
-
-    # def atirar(self):
-    #     dados = self.__tela_partida.atirar()
-    #     self.__tiros_realizados.append(dados)
-    #     dados = list(dados)
-    #     posicao = [self.__dict_posicao[dados[0]], int(dados[1])]
-    #     matriz = self.__partida.pegar_matriz_oceano_jogador()
-
-    #     for linha in matriz:
-    #         for coluna in matriz:
-    #             if
