@@ -26,8 +26,12 @@ class TelaPartida:
         return posicao
 
     def atirar(self):
-        posicao = input("-------- INSIRA A POSIÇÃO DO TIRO ----------")
+        posicao = input("INSIRA A POSIÇÃO DO TIRO   exemplo: A1")
         return posicao
+
+    def mostrar_legenda_oceano(self, qual_oceano: str):
+        print("LEGENDAS " + qual_oceano)
+        print("~ = OCEANO   x = TIRO    B = BOTE    S = SUBMARINO   F = FRAGATA     P = PORTA-AVIÕES    O = ACETO DE TIRO EM ALGUM NAVIO")    
         
     def mostrar_mensagem(self, mensagem):
         print(mensagem)
