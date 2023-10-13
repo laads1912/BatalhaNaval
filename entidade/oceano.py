@@ -11,8 +11,8 @@ class Oceano:
         self.__posicoes_barcos = {}
         self.__tiros_realizados = []
         self.__tiros_acertados = []
-        self.__matriz_oceano_jogador = [[0] * self.__tamanho_oceano for _ in range(self.__tamanho_oceano)]
-        self.__matriz_oceano_maquina = [[0] * self.__tamanho_oceano for _ in range(self.__tamanho_oceano)]
+        self.__matriz_oceano_jogador = [["~"] * self.__tamanho_oceano for _ in range(self.__tamanho_oceano)]
+        self.__matriz_oceano_maquina = [["~"] * self.__tamanho_oceano for _ in range(self.__tamanho_oceano)]
 
     @property
     def tamanho_oceano(self):
@@ -46,5 +46,8 @@ class Oceano:
                 else:
                     self.__matriz_oceano_jogador[dicionario[posicao[0]]][int(posicao[1])] = "P"
 
-    def pegar_matriz(self):
+    def pegar_matriz_jogador(self):
         return self.__matriz_oceano_jogador
+    
+    def pegar_matriz_maquina(self):
+        return self.__matriz_oceano_maquina
