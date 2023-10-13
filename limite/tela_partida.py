@@ -5,7 +5,7 @@ class TelaPartida:
         print("1 - Iniciar Partida")
         print("0 - Retornar")
 
-        opcao = input("Escolha a opção: ")
+        opcao = int(input("Escolha a opção: "))
         return opcao
 
     def iniciar_partida(self):

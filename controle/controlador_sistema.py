@@ -23,7 +23,7 @@ class ControladorSistema:
         exit(0)
 
     def abre_tela(self):
-        lista_opcoes = {1: self.cadastrar_jogador, 0: self.finaliza_sistema}
+        lista_opcoes = {2: self.cadastrar_partida, 1: self.cadastrar_jogador, 0: self.finaliza_sistema}
         
         while True:
             try:
