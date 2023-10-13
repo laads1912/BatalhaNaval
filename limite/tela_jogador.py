@@ -6,7 +6,7 @@ class TelaJogador:
         print("3 - Excluir jogador")
         print("0 - Retornar")
 
-        opcao = input("Escolha a opção: ")
+        opcao = int(input("Escolha a opção: "))
         return opcao
 
     def pegar_dados_jogador(self):
@@ -16,12 +16,12 @@ class TelaJogador:
         return {"nome": nome, "data_nascimento": data_nascimento}
 
     def selecionar_jogador(self):
-        nome = input("Nome do jogador que deseja selecionar: ")
+        nome = input("Nome do jogador que deseja excluir: ")
         return nome
 
     def mostrar_jogador(self, dados_jogador):
-        print("NOME: ", dados_jogador["nome"])
-        print("DATA DE NASCIMENTO: ", dados_jogador["data_nascimento"])
+        print("NOME: " + dados_jogador["nome"])
+        print("DATA DE NASCIMENTO: " + dados_jogador["data_nascimento"])
 
     def mostrar_mensagem(self, mensagem):
         print(mensagem)

@@ -10,46 +10,53 @@ class ControladorJogador:
         self.__controlador_sistema = controlador_sistema
 
     def pega_jogador_pelo_nome(self, nome: str):
-        for jogador in self.__jogadores:
-            if jogador.nome() == nome:
-                return jogador
+        for jogador_temp in self.__jogadores:
+            if jogador_temp.nome == nome:
+                return jogador_temp
         return None
 
     def add_jogador(self):
         dados = self.__tela_jogador.pegar_dados_jogador()
-        jogador = Jogador(dados["nome"], dados["data_nascimento"])
-        self.__jogadores.append(jogador)
+        jogador_temp = Jogador(dados["nome"], dados["data_nascimento"])
+        self.__jogadores.append(jogador_temp)
 
     def listar_jogadores(self):
-        for jogador in self.__jogadores:
-            self.__tela_jogador.mostrar_jogador({"nome": jogador.nome(), "data_nascimento": jogador.data_nascimento()})
+        self.__tela_jogador.mostrar_mensagem("----- LISTA DE JOGADORES -----")
+        for jogador_temp in self.__jogadores:
+            dados_jogador = {"nome": jogador_temp.nome, "data_nascimento": jogador_temp.data_nascimento}
+            self.__tela_jogador.mostrar_jogador(dados_jogador)
 
     def mostrar_ranking(self):
-        jogadores = self.__jogadores
-        ranking = []
-        while len(jogadores) != 0:
-            maior_pontuacao = 0
-            melhor_jogador = 0
-            for j in jogadores:
-                if j.pontuacao() >= maior_pontuacao:
-                    melhor_jogador = j
-            ranking.append(melhor_jogador)
-            jogadores.remove(melhor_jogador)
+        if len(self.__jogadores) == 0:
+            self.__tela_jogador.mostrar_mensagem("Nenhum jogador cadastrado.")
+        else:
+            jogadores_temp = self.__jogadores[:]
+            ranking = []
+            while len(jogadores_temp) != 0:
+                maior_pontuacao = 0
+                melhor_jogador = 0
+                for j in jogadores_temp:
+                    if j.pontuacao >= maior_pontuacao:
+                        melhor_jogador = j
+                ranking.append(melhor_jogador)
+                jogadores_temp.remove(melhor_jogador)
 
-        contador = 1
-        for jogador in ranking:
-            print(f'{contador} - {jogador.nome()}')
-            print(f'Pontuação: {jogador.pontuacao()}')
-            print()
-            contador += 1
+            contador = 1
+            self.__tela_jogador.mostrar_mensagem("----- RANKING -----")
+            for jogador_temp in ranking:
+                self.__tela_jogador.mostrar_mensagem(f'{contador} - {jogador_temp.nome}')
+                self.__tela_jogador.mostrar_mensagem(f'Pontuação: {jogador_temp.pontuacao}')
+                self.__tela_jogador.mostrar_mensagem("")
+                contador += 1
 
     def del_jogador(self):
         self.listar_jogadores()
         nome = self.__tela_jogador.selecionar_jogador()
-        jogador = self.pega_jogador_pelo_nome(nome)
-        if jogador is not None:
-            self.__jogadores.remove(jogador)
+        jogador_temp = self.pega_jogador_pelo_nome(nome)
+        if jogador_temp is not None:
+            self.__jogadores.remove(jogador_temp)
             self.listar_jogadores()
+            return
         else:
             self.__tela_jogador.mostrar_mensagem("Jogador não existe")
 
@@ -57,8 +64,11 @@ class ControladorJogador:
         self.__controlador_sistema.abre_tela()
 
     def abre_tela(self):
-        lista_opcoes = {1: self.add_jogador(), 2: self.mostrar_ranking(), 3: self.del_jogador(), 0: self.retornar}
+        lista_opcoes = {1: self.add_jogador, 2: self.mostrar_ranking, 3: self.del_jogador, 0: self.retornar}
 
         continua = True
         while continua:
-            lista_opcoes[self.__tela_jogador.tela_opcoes()]()
+            opcao_escolhida = self.__tela_jogador.tela_opcoes()
+            funcao_escolhida = lista_opcoes[opcao_escolhida]
+            funcao_escolhida()
+
