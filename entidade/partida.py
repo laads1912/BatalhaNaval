@@ -75,3 +75,6 @@ class Partida:
     
     def pegar_matriz_oceano_maquina(self):
         return self.__oceano_maquina.pegar_matriz()
+    
+    def add_pontuacao(self, ponto: int):
+        self.__pontuacao = self.__pontuacao + ponto
