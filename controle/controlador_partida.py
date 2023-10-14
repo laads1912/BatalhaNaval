@@ -61,12 +61,7 @@ class ControladorPartida:
             else:
                 self.__tela_partida.mostrar_mensagem("Valor inválido")
                 dados = self.__tela_partida.atirar()
-<<<<<<< HEAD
-                return          
         self.__partida.oceano_jogador.add_tiros_realizados(dados)
-=======
-        self.__partida.oceano_jogador.adicionar_tiros_realizados(dados)
->>>>>>> 26b8aafcf49003bf515af1284ded5377347d2f3a
         posicao_str = dados
         dados = list(dados)
         posicao = [self.__dict_posicao[dados[0]], int(dados[1])]
