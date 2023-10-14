@@ -71,7 +71,7 @@ class Partida:
         self.__oceano_jogador.add_barco(barco, posicoes)
 
     def pegar_matriz_oceano_jogador(self):
-        return self.__oceano_jogador.pegar_matriz_jogador()
-
+        return self.__oceano_jogador.pegar_matriz()
+    
     def pegar_matriz_oceano_maquina(self):
-        return self.__oceano_maquina.pegar_matriz_maquina()
+        return self.__oceano_maquina.pegar_matriz()

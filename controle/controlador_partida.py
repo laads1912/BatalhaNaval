@@ -47,6 +47,7 @@ class ControladorPartida:
             self.mostrar_oceano_maquina()
             self.atirar()
 
+
     def pontuacao_total(self):
         self.__tela_partida.mostrar_mensagem("Sua pontuacao é: " + str(self.__partida.pontuacao) + " pontos")
 
@@ -58,35 +59,40 @@ class ControladorPartida:
                 break
             else:
                 self.__tela_partida.mostrar_mensagem("Valor inválido")
-                dados = self.__tela_partida.atirar()
-        self.__tiros_realizados.append(dados)
+                dados = self.__tela_partida.atirar()          
+        self.__partida.oceano_jogador.adicionar_tiros_realizados(dados)
+        posicao_str = dados
         dados = list(dados)
         posicao = [self.__dict_posicao[dados[0]], int(dados[1])]
         matriz = self.__partida.pegar_matriz_oceano_maquina()
         posicao_tiro_matriz = matriz[posicao[0]][posicao[1]]
         if posicao_tiro_matriz == "B":
             self.__tela_partida.mostrar_mensagem("Você Acertou um Barco")
+            self.__partida.oceano_jogador.adicionar_tiros_acertado(posicao_str)
             matriz[posicao[0]][posicao[1]] = "O"
         elif posicao_tiro_matriz == "S":
             self.__tela_partida.mostrar_mensagem("Você Acertou um Submarino")
+            self.__partida.oceano_jogador.adicionar_tiros_acertado(posicao_str)
             matriz[posicao[0]][posicao[1]] = "O"
         elif posicao_tiro_matriz == "F":
             self.__tela_partida.mostrar_mensagem("Você Acertou um Fragata")
+            self.__partida.oceano_jogador.adicionar_tiros_acertado(posicao_str)
             matriz[posicao[0]][posicao[1]] = "O"
         elif posicao_tiro_matriz == "P":
             self.__tela_partida.mostrar_mensagem("Você Acertou um Porta-Aviões")
+            self.__partida.oceano_jogador.adicionar_tiros_acertado(posicao_str)
             matriz[posicao[0]][posicao[1]] = "O"
         else:
             self.__tela_partida.mostrar_mensagem("Errou")
 
+    
     def mostrar_oceano_jogador(self):
-        dicionario = {0: 'A', 1: 'B', 2: 'C', 3: 'D', 4: 'E', 5: 'F', 6: 'G', 7: 'H', 8: 'I', 9: 'J'}
         contador = 0
         matriz = self.__partida.pegar_matriz_oceano_jogador()
         self.__tela_partida.mostrar_legenda_oceano("JOGADOR")
         self.__tela_partida.mostrar_mensagem("  12345678910")
         for linha in matriz:
-            self.__tela_partida.mostrar_linha(dicionario[contador], linha)
+            self.__tela_partida.mostrar_mensagem(self.__dict_posicao[contador] + linha)
 
     def mostrar_oceano_maquina(self):
         contador = 0
@@ -95,6 +101,7 @@ class ControladorPartida:
         self.__tela_partida.mostrar_mensagem("  12345678910")
         for linha in matriz:
             self.__tela_partida.mostrar_mensagem(self.__dict_posicao[contador] + linha)
+
 
     def add_bote(self):
         contador = 0
