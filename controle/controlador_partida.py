@@ -66,7 +66,6 @@ class ControladorPartida:
         matriz = self.__partida.pegar_matriz_oceano_maquina()
         posicao_tiro_matriz = matriz[posicao[0]][posicao[1]]
         posicoes_barcos_maquina = self.__partida.oceano_maquina.posicoes_barcos
-        barco_acertado = None
         verificacao = 0
         for chave, valor in posicoes_barcos_maquina:
             for posicao_barcos_maquina in valor:
@@ -74,32 +73,32 @@ class ControladorPartida:
                 if posicao_str == posicao_barcos_maquina:
                     break
         if verificacao == 1:
-            self.__tela_partida.mostrar_mensagem("Você Acertou um Barco")
+            self.__tela_partida.mostrar_mensagem("Você Acertou um Bote")
             self.__partida.oceano_jogador.add_tiros_acertado(posicao_str)
             self.__partida.oceano_jogador.add_tiros_realizados(posicao_str)
             self.__partida.add_pontuacao(4)
-            matriz[posicao[0]][posicao[1]] = "O"
+            matriz[posicao[0]][posicao[1]] = "B"
             self.atirar()
         elif verificacao == 2:
             self.__tela_partida.mostrar_mensagem("Você Acertou um Submarino")
             self.__partida.oceano_jogador.add_tiros_acertado(posicao_str)
             self.__partida.oceano_jogador.add_tiros_realizados(posicao_str)
             self.__partida.add_pontuacao(1)            
-            matriz[posicao[0]][posicao[1]] = "O"
+            matriz[posicao[0]][posicao[1]] = "S"
             self.atirar()
         elif verificacao == 3:
             self.__tela_partida.mostrar_mensagem("Você Acertou um Fragata")
             self.__partida.oceano_jogador.add_tiros_acertado(posicao_str)
             self.__partida.oceano_jogador.add_tiros_realizados(posicao_str)
             self.__partida.add_pontuacao(1)
-            matriz[posicao[0]][posicao[1]] = "O"
+            matriz[posicao[0]][posicao[1]] = "F"
             self.atirar()
         elif verificacao == 4:
             self.__tela_partida.mostrar_mensagem("Você Acertou um Porta-Aviões")
             self.__partida.oceano_jogador.add_tiros_acertado(posicao_str)
             self.__partida.oceano_jogador.add_tiros_realizados(posicao_str)
             self.__partida.add_pontuacao(1)
-            matriz[posicao[0]][posicao[1]] = "O"
+            matriz[posicao[0]][posicao[1]] = "P"
             self.atirar()
         else:
             self.__tela_partida.mostrar_mensagem("Errou")
