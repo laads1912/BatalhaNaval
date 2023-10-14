@@ -47,3 +47,9 @@ class Oceano:
 
     def pegar_matriz(self):
         return self.__matriz_oceano
+    
+    def adicionar_tiros_realizados(self, tiro: str):
+        self.tiros_realizados.append(tiro)
+    
+    def adicionar_tiros_acertado(self, tiro: str):
+        self.tiros_acertados.append(tiro)
