@@ -11,8 +11,7 @@ class Oceano:
         self.__posicoes_barcos = {}
         self.__tiros_realizados = []
         self.__tiros_acertados = []
-        self.__matriz_oceano_jogador = [["~"] * self.__tamanho_oceano for _ in range(self.__tamanho_oceano)]
-        self.__matriz_oceano_maquina = [["~"] * self.__tamanho_oceano for _ in range(self.__tamanho_oceano)]
+        self.__matriz_oceano = [["~"] * self.__tamanho_oceano for _ in range(self.__tamanho_oceano)]
 
     @property
     def tamanho_oceano(self):
@@ -36,18 +35,15 @@ class Oceano:
                       'U': 20, 'V': 21, 'W': 22, 'X': 23, 'Y': 24, 'Z': 25}
         self.__posicoes_barcos[barco] = posicoes
         if isinstance(posicoes, str):
-            self.__matriz_oceano_jogador[dicionario[posicoes[0]]][int(posicoes[1])] = "B"
+            self.__matriz_oceano[dicionario[posicoes[0]]][int(posicoes[1])] = "B"
         else:
             for posicao in posicoes:
                 if isinstance(barco, Submarino):
-                    self.__matriz_oceano_jogador[dicionario[posicao[0]]][int(posicao[1])] = "S"
+                    self.__matriz_oceano[dicionario[posicao[0]]][int(posicao[1])] = "S"
                 elif isinstance(barco, Fragata):
-                    self.__matriz_oceano_jogador[dicionario[posicao[0]]][int(posicao[1])] = "F"
+                    self.__matriz_oceano[dicionario[posicao[0]]][int(posicao[1])] = "F"
                 else:
-                    self.__matriz_oceano_jogador[dicionario[posicao[0]]][int(posicao[1])] = "P"
+                    self.__matriz_oceano[dicionario[posicao[0]]][int(posicao[1])] = "P"
 
-    def pegar_matriz_jogador(self):
-        return self.__matriz_oceano_jogador
-    
-    def pegar_matriz_maquina(self):
-        return self.__matriz_oceano_maquina
+    def pegar_matriz(self):
+        return self.__matriz_oceano
