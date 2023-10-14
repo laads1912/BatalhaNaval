@@ -12,12 +12,14 @@ class TelaJogador:
     def pegar_dados_jogador(self):
         print("-------- DADOS JOGADOR ----------")
         nome = input("Nome: ")
+        senha = input("Senha: ")
         data_nascimento = input("Data de nascimento: ")
-        return {"nome": nome, "data_nascimento": data_nascimento}
+        return {"nome": nome, "senha": senha, "data_nascimento": data_nascimento}
 
     def selecionar_jogador(self):
         nome = input("Nome do jogador que deseja excluir: ")
-        return nome
+        senha = input("Senha: ")
+        return {"nome": nome, "senha": senha}
 
     def mostrar_jogador(self, dados_jogador):
         print("NOME: " + dados_jogador["nome"])

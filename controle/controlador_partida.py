@@ -1,12 +1,14 @@
 from entidade.partida import Partida
 from limite.tela_partida import TelaPartida
 from entidade.jogador import Jogador
+from entidade.oceano import Oceano
+
 
 class ControladorPartida:
 
     def __init__(self, controlador_sistema):
         self.__final_partida = "1"
-        self.__jogador = Jogador("a", "b")
+        self.__jogador = Jogador("a", "b", "c")
         self.__partida = Partida(self.__jogador, 1)
         self.__tela_partida = TelaPartida()
         self.__controlador_sistema = controlador_sistema
@@ -15,25 +17,27 @@ class ControladorPartida:
                                'K': 10, 'L': 11, 'M': 12, 'N': 13, 'O': 14, 'P': 15, 'Q': 16, 'R': 17, 'S': 18, 'T': 19,
                                'U': 20, 'V': 21, 'W': 22, 'X': 23, 'Y': 24, 'Z': 25}
 
-    def abre_tela(self):
-        lista_opcoes = {1: self.iniciar_partida, 0: self.retornar}
-
-        while True:
-            opcao_escolhida = self.__tela_partida.tela_opcoes()
-            funcao_escolhida = lista_opcoes[opcao_escolhida]
-            funcao_escolhida()
-
     def retornar(self):
         self.__controlador_sistema.abre_tela()
 
     def iniciar_partida(self):
-        dados = self.__tela_partida.iniciar_partida()
-        self.__jogador = self.__controlador_sistema.controlador_jogador.pega_jogador_pelo_nome(dados["nome"])
-        tamanho_oceano = int(dados["tamanho_oceano"])
-        if isinstance(self.__jogador, Jogador) and isinstance(tamanho_oceano, int):
-            self.__partida = Partida(self.__jogador, tamanho_oceano)
-            self.add_embarcacoes()
-            self.continuar_partida()
+        while True:
+            dados = self.__tela_partida.iniciar_partida()
+            self.__jogador = self.__controlador_sistema.controlador_jogador.pega_jogador_pelo_nome(dados["nome"])
+            if self.__jogador is not None:
+                if self.__jogador.senha == dados["senha"]:
+                    tamanho_oceano = int(dados["tamanho_oceano"])
+                    if isinstance(self.__jogador, Jogador) and isinstance(tamanho_oceano, int):
+                        self.__partida = Partida(self.__jogador, tamanho_oceano)
+                        self.add_embarcacoes()
+                        self.continuar_partida()
+                        break
+                else:
+                    self.__tela_partida.mostrar_mensagem("Senha inválida.")
+                    return
+            else:
+                self.__tela_partida.mostrar_mensagem("Jogador não encontrado")
+                return
 
     def continuar_partida(self):
         while self.__final_partida != "0":
@@ -65,35 +69,40 @@ class ControladorPartida:
         posicao = [self.__dict_posicao[dados[0]], int(dados[1])]
         matriz = self.__partida.pegar_matriz_oceano_maquina()
         posicao_tiro_matriz = matriz[posicao[0]][posicao[1]]
+        matriz[posicao[0]][posicao[1]] = "X"
+        if posicao_tiro_matriz == "B":
+            self.__tela_partida.mostrar_mensagem("Você Acertou um Barco")
         posicoes_barcos_maquina = self.__partida.oceano_maquina.posicoes_barcos
         verificacao = 0
         for chave, valor in posicoes_barcos_maquina:
+            verificacao += 1
             for posicao_barcos_maquina in valor:
-                verificacao += 1
                 if posicao_str == posicao_barcos_maquina:
                     break
-        if verificacao == 1:
+            else:
+                verificacao += 1
+        if verificacao <= 3:
             self.__tela_partida.mostrar_mensagem("Você Acertou um Bote")
             self.__partida.oceano_jogador.add_tiros_acertado(posicao_str)
             self.__partida.oceano_jogador.add_tiros_realizados(posicao_str)
             self.__partida.add_pontuacao(4)
             matriz[posicao[0]][posicao[1]] = "B"
             self.atirar()
-        elif verificacao == 2:
+        elif verificacao <= 5:
             self.__tela_partida.mostrar_mensagem("Você Acertou um Submarino")
             self.__partida.oceano_jogador.add_tiros_acertado(posicao_str)
             self.__partida.oceano_jogador.add_tiros_realizados(posicao_str)
             self.__partida.add_pontuacao(1)            
             matriz[posicao[0]][posicao[1]] = "S"
             self.atirar()
-        elif verificacao == 3:
+        elif verificacao <= 7:
             self.__tela_partida.mostrar_mensagem("Você Acertou um Fragata")
             self.__partida.oceano_jogador.add_tiros_acertado(posicao_str)
             self.__partida.oceano_jogador.add_tiros_realizados(posicao_str)
             self.__partida.add_pontuacao(1)
             matriz[posicao[0]][posicao[1]] = "F"
             self.atirar()
-        elif verificacao == 4:
+        elif verificacao == 8:
             self.__tela_partida.mostrar_mensagem("Você Acertou um Porta-Aviões")
             self.__partida.oceano_jogador.add_tiros_acertado(posicao_str)
             self.__partida.oceano_jogador.add_tiros_realizados(posicao_str)
@@ -106,7 +115,10 @@ class ControladorPartida:
 
     def mostrar_oceano(self, nome):
         dicionario = {0: 'A', 1: 'B', 2: 'C', 3: 'D', 4: 'E', 5: 'F', 6: 'G', 7: 'H', 8: 'I', 9: 'J'}
-        matriz = self.__partida.pegar_matriz_oceano_jogador()
+        if nome == "JOGADOR":
+            matriz = self.__partida.pegar_matriz_oceano_jogador()
+        else:
+            matriz = self.__partida.pegar_matriz_oceano_maquina()
         self.__tela_partida.mostrar_legenda_oceano(nome)
         self.__tela_partida.mostrar_espaco()
         contador = 0

@@ -2,8 +2,9 @@ from entidade.partida import Partida
 
 
 class Jogador:
-    def __init__(self, nome: str, data_nascimento: str):
+    def __init__(self, nome: str, senha: str, data_nascimento: str):
         self.__nome = nome
+        self.__senha = senha
         self.__data_nascimento = data_nascimento
         self.__partidas = []
         self.__pontuacao = 0
@@ -23,6 +24,10 @@ class Jogador:
     @data_nascimento.setter
     def data_nascimento(self, data_nascimento: str):
         self.__data_nascimento = data_nascimento
+
+    @property
+    def senha(self):
+        return self.__senha
 
     @property
     def partidas(self):

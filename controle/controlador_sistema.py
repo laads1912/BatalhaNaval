@@ -18,22 +18,18 @@ class ControladorSistema:
         self.abre_tela()
 
     def cadastrar_partida(self):
-        self.__controlador_partida.abre_tela()
+        self.__controlador_partida.iniciar_partida()
 
     def cadastrar_jogador(self):
         self.__controlador_jogador.abre_tela()
-    
+
     def finaliza_sistema(self):
         exit(0)
 
     def abre_tela(self):
-        lista_opcoes = {2: self.cadastrar_partida, 1: self.cadastrar_jogador, 0: self.finaliza_sistema}
-        
+        lista_opcoes = {1: self.cadastrar_partida, 2: self.cadastrar_jogador, 0: self.finaliza_sistema}
+
         while True:
-            try:
-                opcao_escolhida = self.__tela_sistema.tela_opcoes()
-                funcao_escolhida = lista_opcoes[opcao_escolhida]
-                funcao_escolhida()
-                raise ValueError
-            except ValueError:
-                self.__tela_sistema.mostrar_mensagem("Valor inválido, digite um número Válido")
+            opcao_escolhida = self.__tela_sistema.tela_opcoes()
+            funcao_escolhida = lista_opcoes[opcao_escolhida]
+            funcao_escolhida()

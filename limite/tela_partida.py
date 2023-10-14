@@ -1,18 +1,11 @@
 class TelaPartida:
 
-    def tela_opcoes(self):
-        print("----- JOGADORES -----")
-        print("1 - Iniciar Partida")
-        print("0 - Retornar")
-
-        opcao = int(input("Escolha a opção: "))
-        return opcao
-
     def iniciar_partida(self):
         print("-------- INICIAR PARTIDA ----------")
         nome = input("Nome do jogador: ")
+        senha = input("Senha: ")
         tamanho_oceano = input("Tamanho do oceano: ")
-        return {"nome": nome, "tamanho_oceano": tamanho_oceano}
+        return {"nome": nome, "tamanho_oceano": tamanho_oceano, "senha": senha}
 
     def posicionar_barcos(self, barco):
         if barco == "Bote":

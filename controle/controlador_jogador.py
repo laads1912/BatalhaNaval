@@ -17,7 +17,7 @@ class ControladorJogador:
 
     def add_jogador(self):
         dados = self.__tela_jogador.pegar_dados_jogador()
-        jogador_temp = Jogador(dados["nome"], dados["data_nascimento"])
+        jogador_temp = Jogador(dados["nome"], dados["senha"], dados["data_nascimento"])
         self.__jogadores.append(jogador_temp)
 
     def listar_jogadores(self):
@@ -50,15 +50,21 @@ class ControladorJogador:
                 contador += 1
 
     def del_jogador(self):
-        self.listar_jogadores()
-        nome = self.__tela_jogador.selecionar_jogador()
-        jogador_temp = self.pega_jogador_pelo_nome(nome)
-        if jogador_temp is not None:
-            self.__jogadores.remove(jogador_temp)
+        while True:
             self.listar_jogadores()
-            return
-        else:
-            self.__tela_jogador.mostrar_mensagem("Jogador não existe")
+            dados = self.__tela_jogador.selecionar_jogador()
+            jogador_temp = self.pega_jogador_pelo_nome(dados["nome"])
+            if jogador_temp is not None:
+                if jogador_temp.senha == dados["senha"]:
+                    self.__jogadores.remove(jogador_temp)
+                    self.listar_jogadores()
+                    return
+                else:
+                    self.__tela_jogador.mostrar_mensagem("Senha inválida.")
+                    return
+            else:
+                self.__tela_jogador.mostrar_mensagem("Jogador não existe")
+                return
 
     def retornar(self):
         self.__controlador_sistema.abre_tela()
