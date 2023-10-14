@@ -66,6 +66,10 @@ class Partida:
     @property
     def embarcacoes_jogador(self):
         return self.__embarcacoes_jogador
+    
+    @property
+    def oceano_maquina(self):
+        return self.__oceano_maquina
 
     def add_barco_oceano(self, barco, posicoes):
         self.__oceano_jogador.add_barco(barco, posicoes)

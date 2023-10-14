@@ -67,6 +67,14 @@ class ControladorPartida:
         posicao = [self.__dict_posicao[dados[0]], int(dados[1])]
         matriz = self.__partida.pegar_matriz_oceano_maquina()
         posicao_tiro_matriz = matriz[posicao[0]][posicao[1]]
+        posicoes_barcos_maquina = self.__partida.oceano_maquina.posicoes_barcos
+        barco_acertado = None
+        for chave, valor in posicoes_barcos_maquina:
+            for posicao_barcos_maquina in valor:
+                if posicao_str == posicao_barcos_maquina:
+                    barco_acertado = chave
+
+
         if posicao_tiro_matriz == "B":
             self.__tela_partida.mostrar_mensagem("Você Acertou um Barco")
             self.__partida.oceano_jogador.add_tiros_acertado(posicao_str)
