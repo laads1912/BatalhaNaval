@@ -68,19 +68,19 @@ class ControladorPartida:
         posicao_tiro_matriz = matriz[posicao[0]][posicao[1]]
         if posicao_tiro_matriz == "B":
             self.__tela_partida.mostrar_mensagem("Você Acertou um Barco")
-            self.__partida.oceano_jogador.adicionar_tiros_acertado(posicao_str)
+            self.__partida.oceano_jogador.add_tiros_acertado(posicao_str)
             matriz[posicao[0]][posicao[1]] = "O"
         elif posicao_tiro_matriz == "S":
             self.__tela_partida.mostrar_mensagem("Você Acertou um Submarino")
-            self.__partida.oceano_jogador.adicionar_tiros_acertado(posicao_str)
+            self.__partida.oceano_jogador.add_tiros_acertado(posicao_str)
             matriz[posicao[0]][posicao[1]] = "O"
         elif posicao_tiro_matriz == "F":
             self.__tela_partida.mostrar_mensagem("Você Acertou um Fragata")
-            self.__partida.oceano_jogador.adicionar_tiros_acertado(posicao_str)
+            self.__partida.oceano_jogador.add_tiros_acertado(posicao_str)
             matriz[posicao[0]][posicao[1]] = "O"
         elif posicao_tiro_matriz == "P":
             self.__tela_partida.mostrar_mensagem("Você Acertou um Porta-Aviões")
-            self.__partida.oceano_jogador.adicionar_tiros_acertado(posicao_str)
+            self.__partida.oceano_jogador.add_tiros_acertado(posicao_str)
             matriz[posicao[0]][posicao[1]] = "O"
         else:
             self.__tela_partida.mostrar_mensagem("Errou")
