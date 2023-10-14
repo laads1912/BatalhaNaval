@@ -98,7 +98,7 @@ class ControladorPartida:
             self.__partida.oceano_jogador.add_tiros_acertado(posicao_str)
             self.__partida.oceano_jogador.add_tiros_realizados(posicao_str)
             self.__partida.add_pontuacao(1)
-            matriz[posicao[0]][posicao[1]] = ""
+            matriz[posicao[0]][posicao[1]] = "P"
             self.atirar()
         else:
             self.__tela_partida.mostrar_mensagem("Errou")
