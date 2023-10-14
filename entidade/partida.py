@@ -56,6 +56,10 @@ class Partida:
         self.__jogador = jogador
 
     @property
+    def pontuacao(self):
+        return self.__pontuacao
+
+    @property
     def oceano_jogador(self):
         return self.__oceano_jogador
 
@@ -68,6 +72,6 @@ class Partida:
 
     def pegar_matriz_oceano_jogador(self):
         return self.__oceano_jogador.pegar_matriz_jogador()
-    
+
     def pegar_matriz_oceano_maquina(self):
         return self.__oceano_maquina.pegar_matriz_maquina()

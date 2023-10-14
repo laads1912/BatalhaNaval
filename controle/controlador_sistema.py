@@ -10,6 +10,10 @@ class ControladorSistema:
         self.__controlador_jogador = ControladorJogador(self)
         self.__tela_sistema = TelaSistema()
 
+    @property
+    def controlador_jogador(self):
+        return self.__controlador_jogador
+
     def inicializa_sistema(self):
         self.abre_tela()
 

@@ -12,7 +12,6 @@ class ControladorPartida:
         self.__partida = Partida(self.__jogador, 1)
         self.__tela_partida = TelaPartida()
         self.__controlador_sistema = controlador_sistema
-        self.__pontuacao_total = 0
         self.__tiros_realizados = []
         self.__dict_posicao = {'A': 0, 'B': 1, 'C': 2, 'D': 3, 'E': 4, 'F': 5, 'G': 6, 'H': 7, 'I': 8, 'J': 9,
                                'K': 10, 'L': 11, 'M': 12, 'N': 13, 'O': 14, 'P': 15, 'Q': 16, 'R': 17, 'S': 18, 'T': 19,
@@ -35,22 +34,21 @@ class ControladorPartida:
 
     def iniciar_partida(self):
         dados = self.__tela_partida.iniciar_partida()
-        self.__jogador = self.__controlador_sistema.controlador_jogador().pega_jogador_pelo_nome(dados["nome"])
+        self.__jogador = self.__controlador_sistema.controlador_jogador.pega_jogador_pelo_nome(dados["nome"])
         tamanho_oceano = int(dados["tamanho_oceano"])
         if isinstance(self.__jogador, Jogador) and isinstance(tamanho_oceano, int):
             self.__partida = Partida(self.__jogador, tamanho_oceano)
             self.add_embarcacoes()
             self.continuar_partida()
-    
+
     def continuar_partida(self):
         while self.__final_partida == "0":
             self.mostrar_oceano_jogador()
             self.mostrar_oceano_maquina()
             self.atirar()
 
-
     def pontuacao_total(self):
-        self.__tela_partida.mostrar_mensagem("Sua pontuacao é: " + str(self.__pontuacao_total) + " pontos")
+        self.__tela_partida.mostrar_mensagem("Sua pontuacao é: " + str(self.__partida.pontuacao) + " pontos")
 
     def atirar(self):
         dados = self.__tela_partida.atirar()
@@ -60,7 +58,7 @@ class ControladorPartida:
                 break
             else:
                 self.__tela_partida.mostrar_mensagem("Valor inválido")
-                dados = self.__tela_partida.atirar()          
+                dados = self.__tela_partida.atirar()
         self.__tiros_realizados.append(dados)
         dados = list(dados)
         posicao = [self.__dict_posicao[dados[0]], int(dados[1])]
@@ -81,14 +79,14 @@ class ControladorPartida:
         else:
             self.__tela_partida.mostrar_mensagem("Errou")
 
-    
     def mostrar_oceano_jogador(self):
+        dicionario = {0: 'A', 1: 'B', 2: 'C', 3: 'D', 4: 'E', 5: 'F', 6: 'G', 7: 'H', 8: 'I', 9: 'J'}
         contador = 0
         matriz = self.__partida.pegar_matriz_oceano_jogador()
         self.__tela_partida.mostrar_legenda_oceano("JOGADOR")
         self.__tela_partida.mostrar_mensagem("  12345678910")
         for linha in matriz:
-            self.__tela_partida.mostrar_mensagem(self.__dict_posicao[contador] + linha)
+            self.__tela_partida.mostrar_linha(dicionario[contador], linha)
 
     def mostrar_oceano_maquina(self):
         contador = 0
@@ -97,7 +95,6 @@ class ControladorPartida:
         self.__tela_partida.mostrar_mensagem("  12345678910")
         for linha in matriz:
             self.__tela_partida.mostrar_mensagem(self.__dict_posicao[contador] + linha)
-
 
     def add_bote(self):
         contador = 0

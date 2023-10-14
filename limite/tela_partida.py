@@ -31,7 +31,12 @@ class TelaPartida:
 
     def mostrar_legenda_oceano(self, qual_oceano: str):
         print("LEGENDAS " + qual_oceano)
-        print("~ = OCEANO   x = TIRO    B = BOTE    S = SUBMARINO   F = FRAGATA     P = PORTA-AVIÕES    O = ACETO DE TIRO EM ALGUM NAVIO")    
+        print("~ = OCEANO   x = TIRO    B = BOTE    S = SUBMARINO   F = FRAGATA     P = PORTA-AVIÕES    O = ACERTO DE "
+              "TIRO EM ALGUM NAVIO")
         
     def mostrar_mensagem(self, mensagem):
         print(mensagem)
+
+    def mostrar_linha(self, char, linha):
+        print(char, end=" ")
+        print(*linha)
