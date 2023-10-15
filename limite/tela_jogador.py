@@ -4,6 +4,7 @@ class TelaJogador:
         print("1 - Cadastrar jogador")
         print("2 - Mostrar ranking dos jogadores")
         print("3 - Excluir jogador")
+        print("4 - Alterar cadastro")
         print("0 - Retornar")
 
         opcao = int(input("Escolha a opção: "))
@@ -17,7 +18,7 @@ class TelaJogador:
         return {"nome": nome, "senha": senha, "data_nascimento": data_nascimento}
 
     def selecionar_jogador(self):
-        nome = input("Nome do jogador que deseja excluir: ")
+        nome = input("Nome do jogador que deseja selecionar: ")
         senha = input("Senha: ")
         return {"nome": nome, "senha": senha}
 
@@ -25,5 +26,29 @@ class TelaJogador:
         print("NOME: " + dados_jogador["nome"])
         print("DATA DE NASCIMENTO: " + dados_jogador["data_nascimento"])
 
+    def opcoes_alterar_cadastro(self):
+        print("----- OPÇÕES -----")
+        print("1 - Nome")
+        print("2 - Senha")
+        print("3 - Data de nascimento")
+        print("0 - Retornar")
+
+        opcao = int(input("Escolha a opção que deseja alterar: "))
+        return opcao
+
+    def alterar_nome(self):
+        nome = input("Novo nome: ")
+        return nome
+
+    def alterar_senha(self):
+        senha = input("Nova senha: ")
+        return senha
+
+    def alterar_data_nascimento(self):
+        data_nascimento = input("Nova data de nascimento: ")
+        return data_nascimento
+
     def mostrar_mensagem(self, mensagem):
         print(mensagem)
+
+

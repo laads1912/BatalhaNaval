@@ -63,14 +63,45 @@ class ControladorJogador:
                     self.__tela_jogador.mostrar_mensagem("Senha inválida.")
                     return
             else:
-                self.__tela_jogador.mostrar_mensagem("Jogador não existe")
+                self.__tela_jogador.mostrar_mensagem("Jogador não encontrado")
+                return
+
+    def alterar_cadastro(self):
+        while True:
+            self.listar_jogadores()
+            dados = self.__tela_jogador.selecionar_jogador()
+            jogador_temp = self.pega_jogador_pelo_nome(dados["nome"])
+            if jogador_temp is not None:
+                if jogador_temp.senha == dados["senha"]:
+                    lista_opcoes = {"nome": 1, "senha": 2, "data_nascimento": 3, "retornar": 0}
+                    opcao = self.__tela_jogador.opcoes_alterar_cadastro()
+                    if opcao == lista_opcoes["nome"]:
+                        jogador_temp.nome = self.__tela_jogador.alterar_nome()
+                        self.__tela_jogador.mostrar_mensagem("Nome alterado com sucesso!")
+                        return
+                    elif opcao == lista_opcoes["senha"]:
+                        jogador_temp.senha = self.__tela_jogador.alterar_senha()
+                        self.__tela_jogador.mostrar_mensagem("Senha alterada com sucesso!")
+                        return
+                    elif opcao == lista_opcoes["data_nascimento"]:
+                        jogador_temp.data_nascimento = self.__tela_jogador.alterar_data_nascimento()
+                        self.__tela_jogador.mostrar_mensagem("Data de nascimento alterada com sucesso!")
+                        return
+                    else:
+                        return
+                else:
+                    self.__tela_jogador.mostrar_mensagem("Senha inválida.")
+                    return
+            else:
+                self.__tela_jogador.mostrar_mensagem("Jogador não encontrado")
                 return
 
     def retornar(self):
         self.__controlador_sistema.abre_tela()
 
     def abre_tela(self):
-        lista_opcoes = {1: self.add_jogador, 2: self.mostrar_ranking, 3: self.del_jogador, 0: self.retornar}
+        lista_opcoes = {1: self.add_jogador, 2: self.mostrar_ranking, 3: self.del_jogador, 4: self.alterar_cadastro,
+                        0: self.retornar}
 
         continua = True
         while continua:

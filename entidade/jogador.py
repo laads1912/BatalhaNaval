@@ -29,6 +29,10 @@ class Jogador:
     def senha(self):
         return self.__senha
 
+    @senha.setter
+    def senha(self, senha: str):
+        self.__senha = senha
+
     @property
     def partidas(self):
         return self.__partidas
