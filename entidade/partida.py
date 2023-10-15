@@ -49,6 +49,7 @@ class Partida:
         self.__jogador = jogador
         self.__data = datetime.date.today()
         self.__hora = datetime.datetime.now().time()
+        self.__resultado = None
 
     @property
     def jogador(self):

@@ -5,6 +5,7 @@ class TelaJogador:
         print("2 - Mostrar ranking dos jogadores")
         print("3 - Excluir jogador")
         print("4 - Alterar cadastro")
+        print("5 - Mostrar histórico de partidas")
         print("0 - Retornar")
 
         opcao = int(input("Escolha a opção: "))

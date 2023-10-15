@@ -96,16 +96,33 @@ class ControladorJogador:
                 self.__tela_jogador.mostrar_mensagem("Jogador não encontrado")
                 return
 
+    def mostrar_historico(self):
+        while True:
+            self.listar_jogadores()
+            dados = self.__tela_jogador.selecionar_jogador()
+            jogador_temp = self.pega_jogador_pelo_nome(dados["nome"])
+            contador = 1
+            if jogador_temp is not None:
+                for partida in jogador_temp.partidas:
+                    self.__tela_jogador.mostrar_mensagem(f'----- PARTIDA {contador} -----')
+                    self.__tela_jogador.mostrar_mensagem(f'Resultado: {partida.resultado}')
+                    self.__tela_jogador.mostrar_mensagem(f'Data: {partida.data}')
+                    self.__tela_jogador.mostrar_mensagem(f'Hora: {partida.hora}')
+                    contador += 1
+                return
+            else:
+                self.__tela_jogador.mostrar_mensagem("Jogador não encontrado")
+                return
+
     def retornar(self):
         self.__controlador_sistema.abre_tela()
 
     def abre_tela(self):
         lista_opcoes = {1: self.add_jogador, 2: self.mostrar_ranking, 3: self.del_jogador, 4: self.alterar_cadastro,
-                        0: self.retornar}
+                        5: self.mostrar_historico, 0: self.retornar}
 
         continua = True
         while continua:
             opcao_escolhida = self.__tela_jogador.tela_opcoes()
             funcao_escolhida = lista_opcoes[opcao_escolhida]
             funcao_escolhida()
-
