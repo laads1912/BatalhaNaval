@@ -1,4 +1,4 @@
-class TelaSistema():
+class TelaSistema:
 
     def tela_opcoes(self):
         print("----- BATALHA NAVAL -----")

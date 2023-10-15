@@ -3,6 +3,7 @@ from entidade.bote import Bote
 from entidade.fragata import Fragata
 from entidade.porta_avioes import PortaAvioes
 from entidade.submarino import Submarino
+import datetime
 
 
 class Partida:
@@ -46,6 +47,8 @@ class Partida:
         
         self.__pontuacao = 0
         self.__jogador = jogador
+        self.__data = datetime.date.today()
+        self.__hora = datetime.datetime.now().time()
 
     @property
     def jogador(self):
@@ -70,6 +73,14 @@ class Partida:
     @property
     def oceano_maquina(self):
         return self.__oceano_maquina
+
+    @property
+    def data(self):
+        return self.__data
+
+    @property
+    def hora(self):
+        return self.__hora
 
     def add_barco_oceano(self, barco, posicoes):
         self.__oceano_jogador.add_barco(barco, posicoes)

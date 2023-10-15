@@ -27,11 +27,14 @@ class ControladorPartida:
             if self.__jogador is not None:
                 if self.__jogador.senha == dados["senha"]:
                     tamanho_oceano = int(dados["tamanho_oceano"])
-                    if isinstance(self.__jogador, Jogador) and isinstance(tamanho_oceano, int):
-                        self.__partida = Partida(self.__jogador, tamanho_oceano)
-                        self.add_embarcacoes()
-                        self.continuar_partida()
-                        break
+                    if 10 >= tamanho_oceano >= 5:
+                        if isinstance(self.__jogador, Jogador) and isinstance(tamanho_oceano, int):
+                            self.__partida = Partida(self.__jogador, tamanho_oceano)
+                            self.add_embarcacoes()
+                            self.continuar_partida()
+                            break
+                    else:
+                        self.__tela_partida.mostrar_mensagem("Tamanho do oceano inválido.")
                 else:
                     self.__tela_partida.mostrar_mensagem("Senha inválida.")
                     return
@@ -57,9 +60,9 @@ class ControladorPartida:
                     if tiro == dados:
                         self.__tela_partida.mostrar_mensagem("Você já atirou nessa posição")
                         dados = self.__tela_partida.atirar()
-                        return          
+                        return
                 break
-            
+
             else:
                 self.__tela_partida.mostrar_mensagem("Valor inválido")
                 dados = self.__tela_partida.atirar()
@@ -92,7 +95,7 @@ class ControladorPartida:
             self.__tela_partida.mostrar_mensagem("Você Acertou um Submarino")
             self.__partida.oceano_jogador.add_tiros_acertado(posicao_str)
             self.__partida.oceano_jogador.add_tiros_realizados(posicao_str)
-            self.__partida.add_pontuacao(1)            
+            self.__partida.add_pontuacao(1)
             matriz[posicao[0]][posicao[1]] = "S"
             self.atirar()
         elif verificacao <= 7:
@@ -140,15 +143,19 @@ class ControladorPartida:
                 while True:
                     posicoes = self.__tela_partida.posicionar_barcos("Bote").upper()
                     if len(posicoes) == 2 and posicoes[0].isalpha() and posicoes[1].isdigit():
-                        posicao_ocupada = False
-                        for posicao in self.__partida.oceano_jogador.posicoes_barcos.values():
-                            if posicao == posicoes:
-                                posicao_ocupada = True
-                        if posicao_ocupada:
-                            self.__tela_partida.mostrar_mensagem("Posicão ocupada.")
+                        if self.__dict_posicao[posicoes[0]] >= self.__partida.oceano_jogador.tamanho_oceano or int(
+                                posicoes[1]) >= self.__partida.oceano_jogador.tamanho_oceano:
+                            self.__tela_partida.mostrar_mensagem("Posição fornecida é inválida.")
                         else:
-                            self.__partida.add_barco_oceano(self.__partida.embarcacoes_jogador[contador], posicoes)
-                            break
+                            posicao_ocupada = False
+                            for posicao in self.__partida.oceano_jogador.posicoes_barcos.values():
+                                if posicao == posicoes:
+                                    posicao_ocupada = True
+                            if posicao_ocupada:
+                                self.__tela_partida.mostrar_mensagem("Posicão ocupada.")
+                            else:
+                                self.__partida.add_barco_oceano(self.__partida.embarcacoes_jogador[contador], posicoes)
+                                break
                     else:
                         self.__tela_partida.mostrar_mensagem("Posição fornecida é inválida.")
             contador += 1
@@ -165,7 +172,11 @@ class ControladorPartida:
                         condicao = True
                         for posicao in posicoes:
                             if posicao[0].isalpha() and posicao[1].isdigit():
-                                condicao = True
+                                if self.__dict_posicao[
+                                     posicao[0]] >= self.__partida.oceano_jogador.tamanho_oceano or int(
+                                     posicao[1]) >= self.__partida.oceano_jogador.tamanho_oceano:
+                                    condicao = False
+                                    break
                             else:
                                 condicao = False
                                 break
@@ -204,7 +215,11 @@ class ControladorPartida:
                         condicao = True
                         for posicao in posicoes:
                             if posicao[0].isalpha() and posicao[1].isdigit():
-                                condicao = True
+                                if self.__dict_posicao[
+                                     posicao[0]] >= self.__partida.oceano_jogador.tamanho_oceano or int(
+                                     posicao[1]) >= self.__partida.oceano_jogador.tamanho_oceano:
+                                    condicao = False
+                                    break
                             else:
                                 condicao = False
                                 break
@@ -243,7 +258,11 @@ class ControladorPartida:
                 condicao = True
                 for posicao in posicoes:
                     if posicao[0].isalpha() and posicao[1].isdigit():
-                        condicao = True
+                        if self.__dict_posicao[
+                             posicao[0]] >= self.__partida.oceano_jogador.tamanho_oceano or int(
+                             posicao[1]) >= self.__partida.oceano_jogador.tamanho_oceano:
+                            condicao = False
+                            break
                     else:
                         condicao = False
                         break
