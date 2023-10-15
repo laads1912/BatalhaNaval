@@ -8,7 +8,7 @@ class TelaJogador:
         print("5 - Mostrar histórico de partidas")
         print("0 - Retornar")
 
-        opcao = int(input("Escolha a opção: "))
+        opcao = input("Escolha a opção: ")
         return opcao
 
     def pegar_dados_jogador(self):
@@ -34,7 +34,7 @@ class TelaJogador:
         print("3 - Data de nascimento")
         print("0 - Retornar")
 
-        opcao = int(input("Escolha a opção que deseja alterar: "))
+        opcao = input("Escolha a opção que deseja alterar: ")
         return opcao
 
     def alterar_nome(self):

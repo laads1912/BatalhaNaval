@@ -35,6 +35,7 @@ class ControladorPartida:
                             break
                     else:
                         self.__tela_partida.mostrar_mensagem("Tamanho do oceano inválido.")
+                        return
                 else:
                     self.__tela_partida.mostrar_mensagem("Senha inválida.")
                     return

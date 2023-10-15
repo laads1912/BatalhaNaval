@@ -5,7 +5,7 @@ class TelaSistema:
         print("1 - Iniciar partida")
         print("2 - Gerenciar Jogadores")
         print("0 - Fechar Jogo")
-        opcao = int(input("Escolha sua opção: "))
+        opcao = input("Escolha sua opção: ")
         return opcao
     
     def mostrar_mensagem(self, texto: str):
