@@ -1,7 +1,7 @@
 from entidade.partida import Partida
 from limite.tela_partida import TelaPartida
 from entidade.jogador import Jogador
-from entidade.oceano import Oceano
+import random
 
 
 class ControladorPartida:
@@ -31,6 +31,7 @@ class ControladorPartida:
                         if isinstance(self.__jogador, Jogador) and isinstance(tamanho_oceano, int):
                             self.__partida = Partida(self.__jogador, tamanho_oceano)
                             self.add_embarcacoes()
+                            self.add_embarcacoes_maquina()
                             self.continuar_partida()
                             break
                     else:
@@ -228,7 +229,7 @@ class ControladorPartida:
                                      posicao3[1]):
                                 posicao_ocupada = False
                                 for posicoes2 in self.__partida.oceano_jogador.posicoes_barcos.values():
-                                    if posicao1 in posicoes2 or posicao2 in posicoes2:
+                                    if posicao1 in posicoes2 or posicao2 in posicoes2 or posicao3 in posicoes2:
                                         posicao_ocupada = True
                                 if posicao_ocupada:
                                     self.__tela_partida.mostrar_mensagem("Posicão ocupada.")
@@ -274,7 +275,8 @@ class ControladorPartida:
                              posicao1[1] == posicao2[1] == posicao3[1] == posicao4[1]):
                         posicao_ocupada = False
                         for posicoes2 in self.__partida.oceano_jogador.posicoes_barcos.values():
-                            if posicao1 in posicoes2 or posicao2 in posicoes2:
+                            if posicao1 in posicoes2 or posicao2 in posicoes2 or posicao3 in posicoes2 or posicao4 in \
+                                    posicoes2:
                                 posicao_ocupada = True
                         if posicao_ocupada:
                             self.__tela_partida.mostrar_mensagem("Posicão ocupada.")
@@ -298,3 +300,88 @@ class ControladorPartida:
         self.add_fragata()
         self.mostrar_oceano("JOGADOR")
         self.add_porta_avioes()
+
+    def add_embarcacoes_maquina(self):
+        dicionario = {0: 'A', 1: 'B', 2: 'C', 3: 'D', 4: 'E', 5: 'F', 6: 'G', 7: 'H', 8: 'I', 9: 'J'}
+        tamanho_oceano = self.__partida.oceano_maquina.tamanho_oceano
+        contador = 0
+        while True:
+            if contador == 8:
+                return
+            elif contador < 3:
+                while True:
+                    posicao_x = random.randint(0, (tamanho_oceano - 1))
+                    posicao_y = random.randint(0, (tamanho_oceano - 1))
+                    posicao1 = dicionario[posicao_x] + str(posicao_y)
+                    posicao_ocupada = False
+                    for posicoes in self.__partida.oceano_maquina.posicoes_barcos.values():
+                        if posicao1 == posicoes:
+                            posicao_ocupada = True
+                    if not posicao_ocupada:
+                        self.__partida.add_barco_maquina(self.__partida.embarcacoes_maquina[contador], posicao1)
+                        contador += 1
+                        break
+            elif contador < 5:
+                while True:
+                    posicao_x = random.randint(0, (tamanho_oceano - 2))
+                    posicao_y = random.randint(0, (tamanho_oceano - 2))
+                    posicao1 = dicionario[posicao_x] + str(posicao_y)
+                    horizontal_ou_vertical = random.randint(0, 1)
+                    if horizontal_ou_vertical == 1:
+                        posicao2 = dicionario[posicao_x] + str(posicao_y + 1)
+                    else:
+                        posicao2 = dicionario[posicao_x + 1] + str(posicao_y)
+                    posicoes = [posicao1, posicao2]
+                    posicao_ocupada = False
+                    for posicoes2 in self.__partida.oceano_maquina.posicoes_barcos.values():
+                        if posicao1 in posicoes2 or posicao2 in posicoes2:
+                            posicao_ocupada = True
+                    if not posicao_ocupada:
+                        self.__partida.add_barco_maquina(self.__partida.embarcacoes_maquina[contador], posicoes)
+                        contador += 1
+                        break
+            elif contador < 7:
+                while True:
+                    posicao_x = random.randint(0, (tamanho_oceano - 3))
+                    posicao_y = random.randint(0, (tamanho_oceano - 3))
+                    posicao1 = dicionario[posicao_x] + str(posicao_y)
+                    horizontal_ou_vertical = random.randint(0, 1)
+                    if horizontal_ou_vertical == 1:
+                        posicao2 = dicionario[posicao_x] + str(posicao_y + 1)
+                        posicao3 = dicionario[posicao_x] + str(posicao_y + 2)
+                    else:
+                        posicao2 = dicionario[posicao_x + 1] + str(posicao_y)
+                        posicao3 = dicionario[posicao_x + 2] + str(posicao_y)
+                    posicoes = [posicao1, posicao2, posicao3]
+                    posicao_ocupada = False
+                    for posicoes2 in self.__partida.oceano_maquina.posicoes_barcos.values():
+                        if posicao1 in posicoes2 or posicao2 in posicoes2 or posicao3 in posicoes2:
+                            posicao_ocupada = True
+                    if not posicao_ocupada:
+                        self.__partida.add_barco_maquina(self.__partida.embarcacoes_maquina[contador], posicoes)
+                        contador += 1
+                        break
+            else:
+                while True:
+                    posicao_x = random.randint(0, (tamanho_oceano - 4))
+                    posicao_y = random.randint(0, (tamanho_oceano - 4))
+                    posicao1 = dicionario[posicao_x] + str(posicao_y)
+                    horizontal_ou_vertical = random.randint(0, 1)
+                    if horizontal_ou_vertical == 1:
+                        posicao2 = dicionario[posicao_x] + str(posicao_y + 1)
+                        posicao3 = dicionario[posicao_x] + str(posicao_y + 2)
+                        posicao4 = dicionario[posicao_x] + str(posicao_y + 3)
+                    else:
+                        posicao2 = dicionario[posicao_x + 1] + str(posicao_y)
+                        posicao3 = dicionario[posicao_x + 2] + str(posicao_y)
+                        posicao4 = dicionario[posicao_x + 3] + str(posicao_y)
+                    posicoes = [posicao1, posicao2, posicao3, posicao4]
+                    posicao_ocupada = False
+                    for posicoes2 in self.__partida.oceano_maquina.posicoes_barcos.values():
+                        if posicao1 in posicoes2 or posicao2 in posicoes2 or posicao3 in posicoes2 or posicao4 in \
+                                posicoes2:
+                            posicao_ocupada = True
+                    if not posicao_ocupada:
+                        self.__partida.add_barco_maquina(self.__partida.embarcacoes_maquina[contador], posicoes)
+                        contador += 1
+                        break
