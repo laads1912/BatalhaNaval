@@ -8,7 +8,7 @@ from entidade.submarino import Submarino
 class Oceano:
     def __init__(self, tamanho_oceano: int):
         self.__tamanho_oceano = tamanho_oceano
-        self.__posicoes_barcos = {}
+        self.__posicoes_barcos = {Bote(1): ["A1"], Bote(1): ["A2"], Bote(1): ["A3"], Submarino(2): ["B1", "B2"],  Submarino(2): ["B3", "B4"], Fragata(3): ["C1", "C2", "C3"],  Fragata(3): ["C4", "C5", "C6"], PortaAvioes(4): ["D1","D2","D3","D4"]}
         self.__tiros_realizados = []
         self.__tiros_acertados = []
         self.__matriz_oceano = [["~"] * self.__tamanho_oceano for _ in range(self.__tamanho_oceano)]
