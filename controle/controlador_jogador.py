@@ -47,13 +47,13 @@ class ControladorJogador:
                 ranking.append(melhor_jogador)
                 jogadores_temp.remove(melhor_jogador)
 
-            contador = 1
+            contador = len(self.__jogadores)
             self.__tela_jogador.mostrar_mensagem("----- RANKING -----")
             for jogador_temp in ranking:
                 self.__tela_jogador.mostrar_mensagem(f'{contador} - {jogador_temp.nome}')
                 self.__tela_jogador.mostrar_mensagem(f'Pontuação: {jogador_temp.pontuacao}')
                 self.__tela_jogador.mostrar_mensagem("")
-                contador += 1
+                contador -= 1
 
     def del_jogador(self):
         while True:
