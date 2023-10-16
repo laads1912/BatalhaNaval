@@ -81,7 +81,7 @@ class ControladorPartida:
                 break
             else:
                 self.__tela_partida.mostrar_mensagem("Valor inválido")
-                dados = self.__tela_partida.atirar()
+                dados = self.__tela_partida.atirar().upper()
         self.__partida.oceano_jogador.add_tiros_realizados(dados)
         posicao_str = dados
         dados = list(dados)
