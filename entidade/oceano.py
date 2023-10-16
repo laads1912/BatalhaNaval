@@ -46,6 +46,9 @@ class Oceano:
                 else:
                     self.__matriz_oceano[dicionario[posicao[0]]][int(posicao[1])] = "P"
 
+    def add_barco_maquina(self, barco, posicoes):
+        self.__posicoes_barcos[barco] = posicoes
+
     def pegar_matriz(self):
         return self.__matriz_oceano
     

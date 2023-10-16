@@ -46,3 +46,6 @@ class Jogador:
 
     def del_partida(self, partida: Partida):
         self.__partidas.pop(self.__partidas.index(partida))
+
+    def add_pontuacao(self, ponto):
+        self.__pontuacao += ponto

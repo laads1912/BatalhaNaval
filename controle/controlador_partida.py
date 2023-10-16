@@ -33,7 +33,7 @@ class ControladorPartida:
             if self.__jogador is not None:
                 if self.__jogador.senha == dados["senha"]:
                     tamanho_oceano = int(dados["tamanho_oceano"])
-                    if 10 >= tamanho_oceano >= 5:
+                    if 10 >= tamanho_oceano >= 6:
                         if isinstance(self.__jogador, Jogador) and isinstance(tamanho_oceano, int):
                             self.__partida = Partida(self.__jogador, tamanho_oceano)
                             self.add_embarcacoes()
@@ -54,6 +54,7 @@ class ControladorPartida:
         while True:
             if self.__final_partida == "0":
                 self.__jogador.add_partida(self.__partida)
+                self.__jogador.add_pontuacao(self.__partida.pontuacao)
                 self.__final_partida = "1"
                 return self.__controlador_sistema.abre_tela()
             if self.__jogada == "1":
@@ -89,6 +90,10 @@ class ControladorPartida:
         for barco, lista_posicao in posicao_barcos_maquina.items():
             if posicao_str in lista_posicao:
                 nome_barco = barco.nome
+                if nome_barco != "bote":
+                    lista_posicao.remove(posicao_str)
+                if len(lista_posicao) == 0:
+                    self.__partida.add_pontuacao(3)
 
         if nome_barco == "bote":
             self.__partida.add_contador()
@@ -162,6 +167,7 @@ class ControladorPartida:
             self.__tela_partida.mostrar_legenda_oceano()
             self.__tela_partida.mostrar_mensagem("")
             self.__tela_partida.mostrar_mensagem("Oceano Jogador")
+            self.pontuacao_total()
         else:
             matriz = self.__partida.pegar_matriz_oceano_maquina()
             self.__tela_partida.mostrar_mensagem("")
