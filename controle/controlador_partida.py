@@ -25,6 +25,10 @@ class ControladorPartida:
         while True:
             dados = self.__tela_partida.iniciar_partida()
             self.__jogador = self.__controlador_sistema.controlador_jogador.pega_jogador_pelo_nome(dados["nome"])
+            if self.__jogador is None:
+                self.__tela_partida.mostrar_mensagem("Esse jogador não está cadastrado, favor verifique os jogadores cadastrados!")
+                self.__controlador_sistema.abre_tela
+                return
             if self.__jogador is not None:
                 if self.__jogador.senha == dados["senha"]:
                     tamanho_oceano = int(dados["tamanho_oceano"])
