@@ -9,7 +9,6 @@ class Oceano:
     def __init__(self, tamanho_oceano: int):
         self.__tamanho_oceano = tamanho_oceano
         self.__posicoes_barcos = {}
-        self.__posicoes_barcos = {}
         self.__tiros_realizados = []
         self.__tiros_acertados = []
         self.__matriz_oceano = [["~"] * self.__tamanho_oceano for _ in range(self.__tamanho_oceano)]

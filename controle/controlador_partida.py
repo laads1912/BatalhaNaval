@@ -70,7 +70,14 @@ class ControladorPartida:
     def atirar(self):
         dados = self.__tela_partida.atirar().upper()
         while True:
-            if len(dados) == 2 and dados[0].upper().isalpha and dados[1].isalnum():
+            if len(dados) == 2 and dados[0].isalpha and dados[1].isdigit():
+                if dados[0].isdigit():
+                    self.__tela_partida.mostrar_mensagem("Posição fornecida é inválida.")
+                    return
+                elif self.__dict_posicao[dados[0].upper()] >= self.__partida.oceano_jogador.tamanho_oceano or int(
+                        dados[1]) >= self.__partida.oceano_jogador.tamanho_oceano:
+                    self.__tela_partida.mostrar_mensagem("Posição fornecida é inválida.")
+                    return
                 tiros_realizados = self.__partida.oceano_jogador.tiros_realizados
                 if dados in tiros_realizados:
                     self.__tela_partida.mostrar_mensagem("Você já atirou nessa posição")
