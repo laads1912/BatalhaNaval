@@ -26,8 +26,9 @@ class ControladorPartida:
             dados = self.__tela_partida.iniciar_partida()
             self.__jogador = self.__controlador_sistema.controlador_jogador.pega_jogador_pelo_nome(dados["nome"])
             if self.__jogador is None:
-                self.__tela_partida.mostrar_mensagem("Esse jogador não está cadastrado, favor verifique os jogadores cadastrados!")
-                self.__controlador_sistema.abre_tela
+                self.__tela_partida.mostrar_mensagem("Esse jogador não está cadastrado, favor verifique os jogadores "
+                                                     "cadastrados!")
+                self.__controlador_sistema.abre_tela()
                 return
             if self.__jogador is not None:
                 if self.__jogador.senha == dados["senha"]:
@@ -50,30 +51,29 @@ class ControladorPartida:
                 return
 
     def continuar_partida(self):
-        while self.__final_partida != "0":
-            self.mostrar_oceano("JOGADOR")
-            self.mostrar_oceano("MAQUINA")
+        while True:
+            if self.__final_partida == "0":
+                self.__jogador.add_partida(self.__partida)
+                self.__final_partida = "1"
+                return self.__controlador_sistema.abre_tela()
             if self.__jogada == "1":
+                self.mostrar_oceano("JOGADOR")
+                self.mostrar_oceano("MAQUINA")
                 self.atirar()
             else:
                 self.atirar_maquina()
-
-
-        if self.__final_partida == "0":
-            return self.__controlador_sistema.abre_tela()
 
     def pontuacao_total(self):
         self.__tela_partida.mostrar_mensagem("Sua pontuacao é: " + str(self.__partida.pontuacao) + " pontos")
 
     def atirar(self):
         dados = self.__tela_partida.atirar().upper()
-        contador = 0
         while True:
             if len(dados) == 2 and dados[0].upper().isalpha and dados[1].isalnum():
                 tiros_realizados = self.__partida.oceano_jogador.tiros_realizados
                 if dados in tiros_realizados:
-                        self.__tela_partida.mostrar_mensagem("Você já atirou nessa posição")
-                        return
+                    self.__tela_partida.mostrar_mensagem("Você já atirou nessa posição")
+                    return
                 break
             else:
                 self.__tela_partida.mostrar_mensagem("Valor inválido")
@@ -91,62 +91,81 @@ class ControladorPartida:
                 nome_barco = barco.nome
 
         if nome_barco == "bote":
-            contador += 1
-            self.__tela_partida.mostrar_mensagem("Você Acertou um Bote")
+            self.__partida.add_contador()
+            self.__tela_partida.mostrar_mensagem("VOCÊ ACERTOU UM BOTE!")
             self.__partida.oceano_jogador.add_tiros_acertado(posicao_str)
             self.__partida.oceano_jogador.add_tiros_realizados(posicao_str)
             self.__partida.add_pontuacao(4)
             matriz[posicao[0]][posicao[1]] = "B"
-            self.atirar()
-            if contador == 17:
-                self.__tela_partida.mostrar_mensagem("Você Ganhou")
+            if self.__partida.contador == 17:
+                self.__tela_partida.mostrar_mensagem("Você Ganhou!")
+                self.__partida.resultado = "Vitória!"
                 self.__final_partida = "0"
+                return
+            self.mostrar_oceano("MAQUINA")
+            self.atirar()
+
         elif nome_barco == "submarino":
-            contador += 1
-            self.__tela_partida.mostrar_mensagem("Você Acertou um Submarino")
+            self.__partida.add_contador()
+            self.__tela_partida.mostrar_mensagem("VOCÊ ACERTOU UM SUBMARINO!")
             self.__partida.oceano_jogador.add_tiros_acertado(posicao_str)
             self.__partida.oceano_jogador.add_tiros_realizados(posicao_str)
             self.__partida.add_pontuacao(1)
             matriz[posicao[0]][posicao[1]] = "S"
-            self.atirar()
-            if contador == 17:
-                self.__tela_partida.mostrar_mensagem("Você Ganhou")
+            if self.__partida.contador == 17:
+                self.__tela_partida.mostrar_mensagem("Você Ganhou!")
+                self.__partida.resultado = "Vitória!"
                 self.__final_partida = "0"
+                return
+            self.mostrar_oceano("MAQUINA")
+            self.atirar()
+
         elif nome_barco == "fragata":
-            contador += 1
-            self.__tela_partida.mostrar_mensagem("Você Acertou um Fragata")
+            self.__partida.add_contador()
+            self.__tela_partida.mostrar_mensagem("VOCÊ ACERTOU UMA FRAGATA!")
             self.__partida.oceano_jogador.add_tiros_acertado(posicao_str)
             self.__partida.oceano_jogador.add_tiros_realizados(posicao_str)
             self.__partida.add_pontuacao(1)
             matriz[posicao[0]][posicao[1]] = "F"
-            self.atirar()
-            if contador == 17:
-                self.__tela_partida.mostrar_mensagem("Você Ganhou")
+            if self.__partida.contador == 17:
+                self.__tela_partida.mostrar_mensagem("Você Ganhou!")
+                self.__partida.resultado = "Vitória!"
                 self.__final_partida = "0"
+                return
+            self.mostrar_oceano("MAQUINA")
+            self.atirar()
+
         elif nome_barco == "porta_avioes":
-            contador += 1
-            self.__tela_partida.mostrar_mensagem("Você Acertou um Porta-Aviões")
+            self.__partida.add_contador()
+            self.__tela_partida.mostrar_mensagem("VOCÊ ACERTOU UM PORTA-AVIÕES!")
             self.__partida.oceano_jogador.add_tiros_acertado(posicao_str)
             self.__partida.oceano_jogador.add_tiros_realizados(posicao_str)
             self.__partida.add_pontuacao(1)
             matriz[posicao[0]][posicao[1]] = "P"
-            self.atirar()
-            if contador == 17:
-                self.__tela_partida.mostrar_mensagem("Você Ganhou")
+            if self.__partida.contador == 17:
+                self.__tela_partida.mostrar_mensagem("Você Ganhou!")
+                self.__partida.resultado = "Vitória!"
                 self.__final_partida = "0"
+                return
+            self.mostrar_oceano("MAQUINA")
+            self.atirar()
+
         else:
-            self.__tela_partida.mostrar_mensagem("Errou")
+            self.__tela_partida.mostrar_mensagem("ERROU!!")
             self.__partida.oceano_jogador.add_tiros_realizados(posicao_str)
             self.__jogada = "0"
-
 
     def mostrar_oceano(self, nome):
         dicionario = {0: 'A', 1: 'B', 2: 'C', 3: 'D', 4: 'E', 5: 'F', 6: 'G', 7: 'H', 8: 'I', 9: 'J'}
         if nome == "JOGADOR":
             matriz = self.__partida.pegar_matriz_oceano_jogador()
+            self.__tela_partida.mostrar_legenda_oceano()
+            self.__tela_partida.mostrar_mensagem("")
+            self.__tela_partida.mostrar_mensagem("Oceano Jogador")
         else:
             matriz = self.__partida.pegar_matriz_oceano_maquina()
-        self.__tela_partida.mostrar_legenda_oceano(nome)
+            self.__tela_partida.mostrar_mensagem("")
+            self.__tela_partida.mostrar_mensagem("Oceano Máquina")
         self.__tela_partida.mostrar_espaco()
         contador = 0
         while contador < self.__partida.oceano_jogador.tamanho_oceano:
@@ -157,6 +176,7 @@ class ControladorPartida:
         for linha in matriz:
             self.__tela_partida.mostrar_linha(dicionario[contador], linha)
             contador += 1
+        self.__tela_partida.mostrar_mensagem("")
 
     def add_bote(self):
         contador = 0
@@ -422,7 +442,9 @@ class ControladorPartida:
         matriz_oceano_jogador = self.__partida.oceano_jogador.pegar_matriz()
         posicao_x = random.randint(0, (tamanho_oceano - 1))
         posicao_y = random.randint(0, (tamanho_oceano - 1))
-        if matriz_oceano_jogador[posicao_x][posicao_y] == "B" or matriz_oceano_jogador[posicao_x][posicao_y] == "B" or matriz_oceano_jogador[posicao_x][posicao_y] == "S" or matriz_oceano_jogador[posicao_x][posicao_y] == "F" or matriz_oceano_jogador[posicao_x][posicao_y] == "P":
+        if matriz_oceano_jogador[posicao_x][posicao_y] == "B" or matriz_oceano_jogador[posicao_x][posicao_y] == "B" or \
+                matriz_oceano_jogador[posicao_x][posicao_y] == "S" or matriz_oceano_jogador[posicao_x][
+             posicao_y] == "F" or matriz_oceano_jogador[posicao_x][posicao_y] == "P":
             matriz_oceano_jogador[posicao_x][posicao_y] = "O"
             contador += 1
             if contador == 17:

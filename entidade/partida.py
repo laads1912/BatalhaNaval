@@ -46,6 +46,7 @@ class Partida:
         self.__oceano_maquina = Oceano(tamanho_oceano)
         
         self.__pontuacao = 0
+        self.__contador = 0
         self.__jogador = jogador
         self.__data = datetime.date.today()
         self.__hora = datetime.datetime.now().time()
@@ -58,6 +59,14 @@ class Partida:
     @jogador.setter
     def jogador(self, jogador):
         self.__jogador = jogador
+
+    @property
+    def resultado(self):
+        return self.__resultado
+
+    @resultado.setter
+    def resultado(self, result):
+        self.__resultado = result
 
     @property
     def pontuacao(self):
@@ -87,6 +96,10 @@ class Partida:
     def hora(self):
         return self.__hora
 
+    @property
+    def contador(self):
+        return self.__contador
+
     def add_barco_oceano(self, barco, posicoes):
         self.__oceano_jogador.add_barco(barco, posicoes)
 
@@ -101,3 +114,6 @@ class Partida:
     
     def add_pontuacao(self, ponto: int):
         self.__pontuacao = self.__pontuacao + ponto
+
+    def add_contador(self):
+        self.__contador += 1
