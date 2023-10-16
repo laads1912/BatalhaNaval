@@ -8,6 +8,7 @@ class ControladorPartida:
 
     def __init__(self, controlador_sistema):
         self.__final_partida = "1"
+        self.__jogada = "1"
         self.__jogador = Jogador("a", "b", "c")
         self.__partida = Partida(self.__jogador, 1)
         self.__tela_partida = TelaPartida()
@@ -48,7 +49,11 @@ class ControladorPartida:
         while self.__final_partida != "0":
             self.mostrar_oceano("JOGADOR")
             self.mostrar_oceano("MAQUINA")
-            self.atirar()
+            if self.__jogada == "1":
+                self.atirar()
+            else:
+                self.atirar_maquina()
+
 
         if self.__final_partida == "0":
             return self.__controlador_sistema.abre_tela()
@@ -89,6 +94,9 @@ class ControladorPartida:
             self.__partida.add_pontuacao(4)
             matriz[posicao[0]][posicao[1]] = "B"
             self.atirar()
+            if contador == 17:
+                self.__tela_partida.mostrar_mensagem("Você Ganhou")
+                self.__final_partida = "0"
         elif nome_barco == "submarino":
             contador += 1
             self.__tela_partida.mostrar_mensagem("Você Acertou um Submarino")
@@ -97,6 +105,9 @@ class ControladorPartida:
             self.__partida.add_pontuacao(1)
             matriz[posicao[0]][posicao[1]] = "S"
             self.atirar()
+            if contador == 17:
+                self.__tela_partida.mostrar_mensagem("Você Ganhou")
+                self.__final_partida = "0"
         elif nome_barco == "fragata":
             contador += 1
             self.__tela_partida.mostrar_mensagem("Você Acertou um Fragata")
@@ -105,6 +116,9 @@ class ControladorPartida:
             self.__partida.add_pontuacao(1)
             matriz[posicao[0]][posicao[1]] = "F"
             self.atirar()
+            if contador == 17:
+                self.__tela_partida.mostrar_mensagem("Você Ganhou")
+                self.__final_partida = "0"
         elif nome_barco == "porta_avioes":
             contador += 1
             self.__tela_partida.mostrar_mensagem("Você Acertou um Porta-Aviões")
@@ -113,13 +127,14 @@ class ControladorPartida:
             self.__partida.add_pontuacao(1)
             matriz[posicao[0]][posicao[1]] = "P"
             self.atirar()
+            if contador == 17:
+                self.__tela_partida.mostrar_mensagem("Você Ganhou")
+                self.__final_partida = "0"
         else:
             self.__tela_partida.mostrar_mensagem("Errou")
             self.__partida.oceano_jogador.add_tiros_realizados(posicao_str)
+            self.__jogada = "0"
 
-        if contador == 17:
-            self.__tela_partida.mostrar_mensagem("Você Ganhou")
-            self.__final_partida = "0"
 
     def mostrar_oceano(self, nome):
         dicionario = {0: 'A', 1: 'B', 2: 'C', 3: 'D', 4: 'E', 5: 'F', 6: 'G', 7: 'H', 8: 'I', 9: 'J'}
@@ -411,3 +426,4 @@ class ControladorPartida:
                 self.__final_partida = "0"
         else:
             matriz_oceano_jogador[posicao_x][posicao_y] = "X"
+            self.__jogada = "1"
