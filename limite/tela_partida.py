@@ -4,7 +4,7 @@ class TelaPartida:
         print("-------- INICIAR PARTIDA ----------")
         nome = input("Nome do jogador: ")
         senha = input("Senha: ")
-        tamanho_oceano = input("Tamanho do oceano (mínimo = 6, máximo = 10): ")
+        tamanho_oceano = input("Tamanho do oceano (mínimo = 7, máximo = 10): ")
         return {"nome": nome, "tamanho_oceano": tamanho_oceano, "senha": senha}
 
     def posicionar_barcos(self, barco):

@@ -29,7 +29,7 @@ class ControladorPartida:
             if self.__jogador is not None:
                 if self.__jogador.senha == dados["senha"]:
                     tamanho_oceano = int(dados["tamanho_oceano"])
-                    if 10 >= tamanho_oceano >= 6:
+                    if 10 >= tamanho_oceano >= 7:
                         if isinstance(self.__jogador, Jogador) and isinstance(tamanho_oceano, int):
                             self.__partida = Partida(self.__jogador, tamanho_oceano)
                             self.add_embarcacoes()
