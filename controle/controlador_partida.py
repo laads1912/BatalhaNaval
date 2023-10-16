@@ -451,14 +451,16 @@ class ControladorPartida:
         matriz_oceano_jogador = self.__partida.oceano_jogador.pegar_matriz()
         posicao_x = random.randint(0, (tamanho_oceano - 1))
         posicao_y = random.randint(0, (tamanho_oceano - 1))
-        if matriz_oceano_jogador[posicao_x][posicao_y] == "B" or matriz_oceano_jogador[posicao_x][posicao_y] == "B" or \
+        if matriz_oceano_jogador[posicao_x][posicao_y] == "B" or \
                 matriz_oceano_jogador[posicao_x][posicao_y] == "S" or matriz_oceano_jogador[posicao_x][
              posicao_y] == "F" or matriz_oceano_jogador[posicao_x][posicao_y] == "P":
             matriz_oceano_jogador[posicao_x][posicao_y] = "O"
             contador += 1
-            if contador == 17:
-                self.__tela_partida.mostrar_mensagem("Você perdeu")
+            if self.__partida.contador == 17:
+                self.__tela_partida.mostrar_mensagem("Você Perdeu!")
+                self.__partida.resultado = "Derrota!"
                 self.__final_partida = "0"
+                return
         else:
             matriz_oceano_jogador[posicao_x][posicao_y] = "X"
             self.__jogada = "1"
