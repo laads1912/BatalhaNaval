@@ -57,10 +57,8 @@ class ControladorPartida:
         while True:
             if len(dados) == 2 and dados[0].upper().isalpha and dados[1].isalnum():
                 tiros_realizados = self.__partida.oceano_jogador.tiros_realizados
-                for tiro in tiros_realizados:
-                    if tiro == dados:
+                if dados in tiros_realizados:
                         self.__tela_partida.mostrar_mensagem("Você já atirou nessa posição")
-                        dados = self.__tela_partida.atirar()
                         return
                 break
 
@@ -73,8 +71,9 @@ class ControladorPartida:
         posicao = [self.__dict_posicao[dados[0]], int(dados[1])]
         matriz = self.__partida.pegar_matriz_oceano_maquina()
         posicao_barcos_maquina = self.__partida.oceano_maquina.posicoes_barcos
+        matriz[posicao[0]][posicao[1]] = "X"
         nome_barco = ""
-        for barco, lista_posicao in posicao_barcos_maquina:
+        for barco, lista_posicao in posicao_barcos_maquina.items():
             if posicao_str in lista_posicao:
                 nome_barco = barco.nome
 
