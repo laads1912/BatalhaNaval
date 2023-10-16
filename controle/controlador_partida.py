@@ -50,11 +50,15 @@ class ControladorPartida:
             self.mostrar_oceano("MAQUINA")
             self.atirar()
 
+        if self.__final_partida == "0":
+            return self.__controlador_sistema.abre_tela()
+
     def pontuacao_total(self):
         self.__tela_partida.mostrar_mensagem("Sua pontuacao é: " + str(self.__partida.pontuacao) + " pontos")
 
     def atirar(self):
         dados = self.__tela_partida.atirar().upper()
+        contador = 0
         while True:
             if len(dados) == 2 and dados[0].upper().isalpha and dados[1].isalnum():
                 tiros_realizados = self.__partida.oceano_jogador.tiros_realizados
@@ -62,7 +66,6 @@ class ControladorPartida:
                         self.__tela_partida.mostrar_mensagem("Você já atirou nessa posição")
                         return
                 break
-
             else:
                 self.__tela_partida.mostrar_mensagem("Valor inválido")
                 dados = self.__tela_partida.atirar()
@@ -79,6 +82,7 @@ class ControladorPartida:
                 nome_barco = barco.nome
 
         if nome_barco == "bote":
+            contador += 1
             self.__tela_partida.mostrar_mensagem("Você Acertou um Bote")
             self.__partida.oceano_jogador.add_tiros_acertado(posicao_str)
             self.__partida.oceano_jogador.add_tiros_realizados(posicao_str)
@@ -86,6 +90,7 @@ class ControladorPartida:
             matriz[posicao[0]][posicao[1]] = "B"
             self.atirar()
         elif nome_barco == "submarino":
+            contador += 1
             self.__tela_partida.mostrar_mensagem("Você Acertou um Submarino")
             self.__partida.oceano_jogador.add_tiros_acertado(posicao_str)
             self.__partida.oceano_jogador.add_tiros_realizados(posicao_str)
@@ -93,6 +98,7 @@ class ControladorPartida:
             matriz[posicao[0]][posicao[1]] = "S"
             self.atirar()
         elif nome_barco == "fragata":
+            contador += 1
             self.__tela_partida.mostrar_mensagem("Você Acertou um Fragata")
             self.__partida.oceano_jogador.add_tiros_acertado(posicao_str)
             self.__partida.oceano_jogador.add_tiros_realizados(posicao_str)
@@ -100,6 +106,7 @@ class ControladorPartida:
             matriz[posicao[0]][posicao[1]] = "F"
             self.atirar()
         elif nome_barco == "porta_avioes":
+            contador += 1
             self.__tela_partida.mostrar_mensagem("Você Acertou um Porta-Aviões")
             self.__partida.oceano_jogador.add_tiros_acertado(posicao_str)
             self.__partida.oceano_jogador.add_tiros_realizados(posicao_str)
@@ -109,6 +116,10 @@ class ControladorPartida:
         else:
             self.__tela_partida.mostrar_mensagem("Errou")
             self.__partida.oceano_jogador.add_tiros_realizados(posicao_str)
+
+        if contador == 17:
+            self.__tela_partida.mostrar_mensagem("Você Ganhou")
+            self.__final_partida = "0"
 
     def mostrar_oceano(self, nome):
         dicionario = {0: 'A', 1: 'B', 2: 'C', 3: 'D', 4: 'E', 5: 'F', 6: 'G', 7: 'H', 8: 'I', 9: 'J'}
@@ -385,3 +396,18 @@ class ControladorPartida:
                         self.__partida.add_barco_maquina(self.__partida.embarcacoes_maquina[contador], posicoes)
                         contador += 1
                         break
+
+    def atirar_maquina(self):
+        contador = 0
+        tamanho_oceano = self.__partida.oceano_jogador.tamanho_oceano
+        matriz_oceano_jogador = self.__partida.oceano_jogador.pegar_matriz()
+        posicao_x = random.randint(0, (tamanho_oceano - 1))
+        posicao_y = random.randint(0, (tamanho_oceano - 1))
+        if matriz_oceano_jogador[posicao_x][posicao_y] == "B" or matriz_oceano_jogador[posicao_x][posicao_y] == "B" or matriz_oceano_jogador[posicao_x][posicao_y] == "S" or matriz_oceano_jogador[posicao_x][posicao_y] == "F" or matriz_oceano_jogador[posicao_x][posicao_y] == "P":
+            matriz_oceano_jogador[posicao_x][posicao_y] = "O"
+            contador += 1
+            if contador == 17:
+                self.__tela_partida.mostrar_mensagem("Você perdeu")
+                self.__final_partida = "0"
+        else:
+            matriz_oceano_jogador[posicao_x][posicao_y] = "X"
