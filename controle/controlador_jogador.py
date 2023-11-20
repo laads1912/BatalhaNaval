@@ -122,6 +122,7 @@ class ControladorJogador:
                     self.__tela_jogador.mostrar_mensagem(f'Resultado: {partida.resultado}')
                     self.__tela_jogador.mostrar_mensagem(f'Data: {partida.data}')
                     self.__tela_jogador.mostrar_mensagem(f'Hora: {partida.hora}')
+                    self.__tela_jogador.mostrar_jogadas(partida.oceano_jogador.tiros_realizados)
                     contador += 1
                 return
             else:

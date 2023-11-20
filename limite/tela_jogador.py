@@ -52,4 +52,6 @@ class TelaJogador:
     def mostrar_mensagem(self, mensagem):
         print(mensagem)
 
-
+    def mostrar_jogadas(self, jogadas):
+        print("Jogadas: ")
+        print(*jogadas)

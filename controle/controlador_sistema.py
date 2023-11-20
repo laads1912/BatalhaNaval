@@ -23,11 +23,14 @@ class ControladorSistema:
     def cadastrar_jogador(self):
         self.__controlador_jogador.abre_tela()
 
+    def partida_teste(self):
+        self.__controlador_partida.partida_teste()
+
     def finaliza_sistema(self):
         exit(0)
 
     def abre_tela(self):
-        lista_opcoes = {1: self.cadastrar_partida, 2: self.cadastrar_jogador, 0: self.finaliza_sistema}
+        lista_opcoes = {1: self.cadastrar_partida, 2: self.cadastrar_jogador, 0: self.finaliza_sistema, 123: self.partida_teste}
 
         while True:
             opcao_escolhida = self.__tela_sistema.tela_opcoes()
