@@ -70,7 +70,7 @@ class ControladorPartida:
                 if dados[0].isdigit():
                     self.__tela_partida.mostrar_mensagem("Posição fornecida é inválida.")
                     return
-                elif self.__dict_posicao[dados[0].upper()] >= self.__partida.oceano_jogador.tamanho_oceano or int(
+                elif self.__dict_posicao[dados[0]] >= self.__partida.oceano_jogador.tamanho_oceano or int(
                         dados[1]) >= self.__partida.oceano_jogador.tamanho_oceano:
                     self.__tela_partida.mostrar_mensagem("Posição fornecida é inválida.")
                     return

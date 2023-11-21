@@ -1,3 +1,5 @@
+#import PySimpleGui as pg
+
 class TelaPartida:
 
     def iniciar_partida(self):
