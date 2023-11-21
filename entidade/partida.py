@@ -47,6 +47,7 @@ class Partida:
         
         self.__pontuacao = 0
         self.__contador = 0
+        self.__contador_maquina = 0
         self.__jogador = jogador
         self.__data = datetime.date.today()
         self.__hora = datetime.datetime.now().time()
@@ -100,6 +101,10 @@ class Partida:
     def contador(self):
         return self.__contador
 
+    @property
+    def contador_maquina(self):
+        return self.__contador_maquina
+
     def add_barco_oceano(self, barco, posicoes):
         self.__oceano_jogador.add_barco(barco, posicoes)
 
@@ -117,3 +122,6 @@ class Partida:
 
     def add_contador(self):
         self.__contador += 1
+
+    def add_contador_maquina(self):
+        self.__contador_maquina += 1

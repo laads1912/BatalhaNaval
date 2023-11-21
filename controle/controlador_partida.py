@@ -441,7 +441,6 @@ class ControladorPartida:
                         break
 
     def atirar_maquina(self):
-        contador = 0
         tamanho_oceano = self.__partida.oceano_jogador.tamanho_oceano
         matriz_oceano_jogador = self.__partida.oceano_jogador.pegar_matriz()
         posicao_x = random.randint(0, (tamanho_oceano - 1))
@@ -450,12 +449,13 @@ class ControladorPartida:
                 matriz_oceano_jogador[posicao_x][posicao_y] == "S" or matriz_oceano_jogador[posicao_x][
              posicao_y] == "F" or matriz_oceano_jogador[posicao_x][posicao_y] == "P":
             matriz_oceano_jogador[posicao_x][posicao_y] = "O"
-            contador += 1
-            if self.__partida.contador == 17:
+            self.__partida.add_contador_maquina()
+            if self.__partida.contador_maquina == 17:
                 self.__tela_partida.mostrar_mensagem("Você Perdeu!")
                 self.__partida.resultado = "Derrota!"
                 self.__final_partida = "0"
                 return
+            self.__jogada = "1"
         else:
             matriz_oceano_jogador[posicao_x][posicao_y] = "X"
             self.__jogada = "1"
