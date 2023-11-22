@@ -64,26 +64,6 @@ class TelaPartida:
                 'tamanho_oceano': values['tamanho_oceano']
             }
 
-    def posicionar_barcos(self, barco):
-        layout = [
-            [sg.Text(f'Posicionar {barco}', font=('Helvetica', 16), justification='center')],
-            [sg.Text('Escolha a posição:'), sg.InputText(key='posicao')],
-            [sg.Button('Confirmar', size=(10, 2))]
-        ]
-
-        self.__window = sg.Window(f'Batalha Naval - Posicionar {barco}', layout, element_justification='center')
-
-        while True:
-            event, values = self.__window.read()
-
-            if event == sg.WINDOW_CLOSED:
-                self.__window.close()
-                return None
-
-            if event == 'Confirmar':
-                self.__window.close()
-                return {'posicao': values['posicao']}
-
     def atirar(self):
         layout = [
             [sg.Text('ATIRAR', font=('Helvetica', 16), justification='center')],
@@ -105,7 +85,7 @@ class TelaPartida:
                 return {'posicao': values['posicao']}
 
     def mostrar_legenda_oceano(self):
-        sg.popup('LEGENDAS\n~ = OCEANO   x = TIRO    B = BOTE    S = SUBMARINO   F = FRAGATA     P = PORTA-AVIÕES    O = ACERTO DE TIRO EM ALGUM NAVIO')
+        sg.popup('~ = OCEANO   x = TIRO    B = BOTE    S = SUBMARINO   F = FRAGATA     P = PORTA-AVIÕES    O = ACERTO DE TIRO EM ALGUM NAVIO')
 
     def mostrar_mensagem(self, mensagem):
         sg.popup(mensagem)
@@ -129,3 +109,39 @@ class TelaPartida:
         ]
 
         self.__window = sg.Window('Batalha Naval - Iniciar Partida', layout, element_justification='center')
+
+    def mostrar_oceanos(self, oceanos):
+        layout = [
+            [sg.Text(oceanos, font=('Arial', 16), justification='center')],
+            [sg.Button('Continuar', size=(15, 2))],
+        ]
+
+        self.__window = sg.Window('PARTIDA', layout, element_justification='center')
+
+        while True:
+            event, values = self.__window.read()
+
+            if event == 'Continuar':
+                self.__window.close()
+                return
+
+    def mostrar_oceano_add_embarcacoes(self, oceano, barco):
+        layout = [
+            [sg.Text(oceano, font=('Arial', 16), justification='center')],
+            [sg.Text(f'Posicionar {barco}', font=('Helvetica', 16), justification='center')],
+            [sg.Text('Escolha a posição:'), sg.InputText(key='posicao')],
+            [sg.Button('Continuar', size=(15, 2))],
+        ]
+
+        self.__window = sg.Window(f'Batalha Naval - Posicionar {barco}', layout, element_justification='center')
+
+        while True:
+            event, values = self.__window.read()
+
+            if event == sg.WINDOW_CLOSED:
+                self.__window.close()
+                return None
+
+            if event == 'Continuar':
+                self.__window.close()
+                return {'posicao': values['posicao']}

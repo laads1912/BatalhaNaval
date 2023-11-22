@@ -160,29 +160,58 @@ class ControladorPartida:
             self.__tela_partida.mostrar_mensagem("ERROU!!")
             self.__jogada = "0"
 
-    def mostrar_oceano(self, nome):
+    def mostrar_oceano_add_embarcacoes(self, barco):
         dicionario = {0: 'A', 1: 'B', 2: 'C', 3: 'D', 4: 'E', 5: 'F', 6: 'G', 7: 'H', 8: 'I', 9: 'J'}
-        if nome == "JOGADOR":
-            matriz = self.__partida.pegar_matriz_oceano_jogador()
-            self.__tela_partida.mostrar_legenda_oceano()
-            self.__tela_partida.mostrar_mensagem("")
-            self.__tela_partida.mostrar_mensagem("Oceano Jogador")
-            self.pontuacao_total()
-        else:
-            matriz = self.__partida.pegar_matriz_oceano_maquina()
-            self.__tela_partida.mostrar_mensagem("")
-            self.__tela_partida.mostrar_mensagem("Oceano Máquina")
-        self.__tela_partida.mostrar_espaco()
+        matriz = self.__partida.pegar_matriz_oceano_jogador()
+        oceano = """"""
+        oceano += '~ = OCEANO   x = TIRO    B = BOTE    S = SUBMARINO   F = FRAGATA     P = PORTA-AVIÕES    O = ACERTO DE TIRO EM ALGUM NAVIO\n'
+        oceano += "\n"
+        oceano += "----- OCEANO JOGADOR -----\n"
+        oceano += "\n"
+        oceano += "SUA PONTUAÇÃO É: " + str(self.__partida.pontuacao) + "\n"
+        oceano += "\n"
         contador = 0
+        oceano += "    "
         while contador < self.__partida.oceano_jogador.tamanho_oceano:
-            self.__tela_partida.mostrar_coordenada(contador)
+            oceano += str(contador) + " "
             contador += 1
-        self.__tela_partida.mostrar_mensagem("")
+        oceano += "\n"
         contador = 0
         for linha in matriz:
-            self.__tela_partida.mostrar_linha(dicionario[contador], linha)
+            oceano += f'{dicionario[contador]} {" ".join(linha)}\n'
             contador += 1
-        self.__tela_partida.mostrar_mensagem("")
+        oceano += "\n"
+        dados = self.__tela_partida.mostrar_oceano_add_embarcacoes(oceano, barco)
+        return dados
+
+    def mostrar_oceano(self, nome):
+        dicionario = {0: 'A', 1: 'B', 2: 'C', 3: 'D', 4: 'E', 5: 'F', 6: 'G', 7: 'H', 8: 'I', 9: 'J'}
+        oceano = """"""
+        if nome == "JOGADOR":
+            matriz = self.__partida.pegar_matriz_oceano_jogador()
+            oceano += '~ = OCEANO   x = TIRO    B = BOTE    S = SUBMARINO   F = FRAGATA     P = PORTA-AVIÕES    O = ACERTO DE TIRO EM ALGUM NAVIO\n'
+            oceano += "\n"
+            oceano += "----- OCEANO JOGADOR -----\n"
+            oceano += "\n"
+            oceano += "SUA PONTUAÇÃO É: " + str(self.__partida.pontuacao) + "\n"
+            oceano += "\n"
+        else:
+            matriz = self.__partida.pegar_matriz_oceano_maquina()
+            oceano += "\n"
+            oceano += "OCEANO MÁQUINA\n"
+            oceano += "\n"
+        contador = 0
+        oceano += "    "
+        while contador < self.__partida.oceano_jogador.tamanho_oceano:
+            oceano += str(contador) + " "
+            contador += 1
+        oceano += "\n"
+        contador = 0
+        for linha in matriz:
+            oceano += f'{dicionario[contador]} {" ".join(linha)}\n'
+            contador += 1
+        oceano += "\n"
+        self.__tela_partida.mostrar_oceano(oceano)
 
     def add_bote(self):
         contador = 0
@@ -191,7 +220,8 @@ class ControladorPartida:
                 break
             else:
                 while True:
-                    posicoes = self.__tela_partida.posicionar_barcos("Bote").upper()
+                    dados = self.mostrar_oceano_add_embarcacoes("Bote")
+                    posicoes = dados['posicao'].upper()
                     if len(posicoes) == 2 and posicoes[0].isalpha() and posicoes[1].isdigit():
                         if self.__dict_posicao[posicoes[0]] >= self.__partida.oceano_jogador.tamanho_oceano or int(
                                 posicoes[1]) >= self.__partida.oceano_jogador.tamanho_oceano:
@@ -217,7 +247,8 @@ class ControladorPartida:
                 break
             else:
                 while True:
-                    posicoes = self.__tela_partida.posicionar_barcos("Submarino").upper().split()
+                    dados = self.mostrar_oceano_add_embarcacoes("Submarino")
+                    posicoes = dados['posicao'].upper().split()
                     if len(posicoes) == 2:
                         condicao = True
                         for posicao in posicoes:
@@ -260,7 +291,8 @@ class ControladorPartida:
                 break
             else:
                 while True:
-                    posicoes = self.__tela_partida.posicionar_barcos("Fragata").upper().split()
+                    dados = self.mostrar_oceano_add_embarcacoes("Fragata")
+                    posicoes = dados['posicao'].upper().split()
                     if len(posicoes) == 3:
                         condicao = True
                         for posicao in posicoes:
@@ -303,7 +335,8 @@ class ControladorPartida:
 
     def add_porta_avioes(self):
         while True:
-            posicoes = self.__tela_partida.posicionar_barcos("PortaAvioes").upper().split()
+            dados = self.mostrar_oceano_add_embarcacoes("Porta Avioes")
+            posicoes = dados['posicao'].upper().split()
             if len(posicoes) == 4:
                 condicao = True
                 for posicao in posicoes:
@@ -348,13 +381,9 @@ class ControladorPartida:
                 self.__tela_partida.mostrar_mensagem("Posição fornecida é inválida.")
 
     def add_embarcacoes(self):
-        self.mostrar_oceano("JOGADOR")
         self.add_bote()
-        self.mostrar_oceano("JOGADOR")
         self.add_submarino()
-        self.mostrar_oceano("JOGADOR")
         self.add_fragata()
-        self.mostrar_oceano("JOGADOR")
         self.add_porta_avioes()
 
     def add_embarcacoes_maquina(self):
