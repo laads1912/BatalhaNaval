@@ -266,10 +266,9 @@ class TelaJogador:
         layout = [
             [sg.Text(f'----- PARTIDA {contador} -----', font=('Arial', 16), justification='center')],
             [sg.Text(f'Resultado: {partida.resultado}', font=('Arial', 16), justification='center')],
-            [sg.Text('Mostrar ranking dos jogadores', font=('Arial', 16), justification='center')],
             [sg.Text(f'Data: {partida.data}', font=('Arial', 16), justification='center')],
             [sg.Text(f'Hora: {partida.hora}', font=('Arial', 16), justification='center')],
-            [sg.Text(f'Jogadas: {jogadas}', font=('Arial', 16), justification='center')],
+            [sg.Text(f'Jogadas: {jogadas}', font=('Arial', 11), justification='center')],
             [sg.Button('Retornar', size=(25, 2))]
         ]
 

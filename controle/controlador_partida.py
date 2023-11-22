@@ -501,8 +501,6 @@ class ControladorPartida:
                 self.__final_partida = "1"
                 return self.__controlador_sistema.abre_tela()
             if self.__jogada == "1":
-                self.mostrar_oceano("JOGADOR")
-                self.mostrar_oceano("MAQUINA")
                 self.atirar_teste()
             else:
                 self.atirar_maquina()
@@ -530,62 +528,49 @@ class ControladorPartida:
 
         if nome_barco == "bote":
             self.__partida.add_contador()
-            self.__tela_partida.mostrar_mensagem("VOCÊ ACERTOU UM BOTE!")
             self.__partida.oceano_jogador.add_tiros_acertado(posicao_str)
             self.__partida.add_pontuacao(4)
             matriz[posicao[0]][posicao[1]] = "B"
             if self.__partida.contador == 17:
-                self.__tela_partida.mostrar_mensagem("Você Ganhou!")
                 self.__partida.resultado = "Vitória!"
                 self.__final_partida = "0"
                 return
-            self.mostrar_oceano("MAQUINA")
             self.atirar_teste()
 
         elif nome_barco == "submarino":
             self.__partida.add_contador()
-            self.__tela_partida.mostrar_mensagem("VOCÊ ACERTOU UM SUBMARINO!")
             self.__partida.oceano_jogador.add_tiros_acertado(posicao_str)
             self.__partida.add_pontuacao(1)
             matriz[posicao[0]][posicao[1]] = "S"
             if self.__partida.contador == 17:
-                self.__tela_partida.mostrar_mensagem("Você Ganhou!")
                 self.__partida.resultado = "Vitória!"
                 self.__final_partida = "0"
                 return
-            self.mostrar_oceano("MAQUINA")
             self.atirar_teste()
 
         elif nome_barco == "fragata":
             self.__partida.add_contador()
-            self.__tela_partida.mostrar_mensagem("VOCÊ ACERTOU UMA FRAGATA!")
             self.__partida.oceano_jogador.add_tiros_acertado(posicao_str)
             self.__partida.add_pontuacao(1)
             matriz[posicao[0]][posicao[1]] = "F"
             if self.__partida.contador == 17:
-                self.__tela_partida.mostrar_mensagem("Você Ganhou!")
                 self.__partida.resultado = "Vitória!"
                 self.__final_partida = "0"
                 return
-            self.mostrar_oceano("MAQUINA")
             self.atirar_teste()
 
         elif nome_barco == "porta_avioes":
             self.__partida.add_contador()
-            self.__tela_partida.mostrar_mensagem("VOCÊ ACERTOU UM PORTA-AVIÕES!")
             self.__partida.oceano_jogador.add_tiros_acertado(posicao_str)
             self.__partida.add_pontuacao(1)
             matriz[posicao[0]][posicao[1]] = "P"
             if self.__partida.contador == 17:
-                self.__tela_partida.mostrar_mensagem("Você Ganhou!")
                 self.__partida.resultado = "Vitória!"
                 self.__final_partida = "0"
                 return
-            self.mostrar_oceano("MAQUINA")
             self.atirar_teste()
 
         else:
-            self.__tela_partida.mostrar_mensagem("ERROU!!")
             self.__jogada = "0"
 
     def add_embarcacoes_teste(self):
