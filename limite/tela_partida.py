@@ -45,32 +45,24 @@ import PySimpleGUI as sg
 class TelaPartida:
     def __init__(self):
         sg.theme('DarkGrey2')
+        self.__window = None
+        self.__init_opcoes()
 
     def iniciar_partida(self):
-        layout = [
-            [sg.Text('INICIAR PARTIDA', font=('Helvetica', 16), justification='center')],
-            [sg.Text('Nome do jogador:'), sg.InputText(key='nome')],
-            [sg.Text('Senha:'), sg.InputText(key='senha')],
-            [sg.Text('Tamanho do oceano (mínimo = 7, máximo = 10):'), sg.InputText(key='tamanho_oceano')],
-            [sg.Button('Iniciar Partida', size=(15, 2))],
-        ]
+        self.__init_opcoes()
+        event, values = self.__window.read()
 
-        window = sg.Window('Batalha Naval - Iniciar Partida', layout, element_justification='center')
+        if event == sg.WINDOW_CLOSED:
+            self.__window.close()
+            return None
 
-        while True:
-            event, values = window.read()
-
-            if event == sg.WINDOW_CLOSED:
-                window.close()
-                return None
-
-            if event == 'Iniciar Partida':
-                window.close()
-                return {
-                    'nome': values['nome'],
-                    'senha': values['senha'],
-                    'tamanho_oceano': values['tamanho_oceano']
-                }
+        if event == 'Iniciar Partida':
+            self.__window.close()
+            return {
+                'nome': values['nome'],
+                'senha': values['senha'],
+                'tamanho_oceano': values['tamanho_oceano']
+            }
 
     def posicionar_barcos(self, barco):
         layout = [
@@ -79,17 +71,17 @@ class TelaPartida:
             [sg.Button('Confirmar', size=(10, 2))]
         ]
 
-        window = sg.Window(f'Batalha Naval - Posicionar {barco}', layout, element_justification='center')
+        self.__window = sg.Window(f'Batalha Naval - Posicionar {barco}', layout, element_justification='center')
 
         while True:
-            event, values = window.read()
+            event, values = self.__window.read()
 
             if event == sg.WINDOW_CLOSED:
-                window.close()
+                self.__window.close()
                 return None
 
             if event == 'Confirmar':
-                window.close()
+                self.__window.close()
                 return {'posicao': values['posicao']}
 
     def atirar(self):
@@ -99,17 +91,17 @@ class TelaPartida:
             [sg.Button('Atirar', size=(10, 2))]
         ]
 
-        window = sg.Window('Batalha Naval - Atirar', layout, element_justification='center')
+        self.__window = sg.Window('Batalha Naval - Atirar', layout, element_justification='center')
 
         while True:
-            event, values = window.read()
+            event, values = self.__window.read()
 
             if event == sg.WINDOW_CLOSED:
-                window.close()
+                self.__window.close()
                 return None
 
             if event == 'Atirar':
-                window.close()
+                self.__window.close()
                 return {'posicao': values['posicao']}
 
     def mostrar_legenda_oceano(self):
@@ -126,3 +118,14 @@ class TelaPartida:
 
     def mostrar_espaco(self):
         sg.popup('  ')
+
+    def __init_opcoes(self):
+        layout = [
+            [sg.Text('INICIAR PARTIDA', font=('Helvetica', 16), justification='center')],
+            [sg.Text('Nome do jogador:'), sg.InputText(key='nome')],
+            [sg.Text('Senha:'), sg.InputText(key='senha')],
+            [sg.Text('Tamanho do oceano (mínimo = 7, máximo = 10):'), sg.InputText(key='tamanho_oceano')],
+            [sg.Button('Iniciar Partida', size=(15, 2))],
+        ]
+
+        self.__window = sg.Window('Batalha Naval - Iniciar Partida', layout, element_justification='center')

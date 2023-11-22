@@ -18,6 +18,8 @@ class ControladorJogador:
     def add_jogador(self):
         while True:
             dados = self.__tela_jogador.pegar_dados_jogador()
+            if dados is None:
+                return
             jogador_temp = Jogador(dados["nome"], dados["senha"], dados["data_nascimento"])
             if dados["nome"] != "" and dados["senha"] != "" and dados["data_nascimento"]:
                 self.__jogadores.append(jogador_temp)
@@ -50,15 +52,15 @@ class ControladorJogador:
             contador = len(self.__jogadores)
             self.__tela_jogador.mostrar_mensagem("----- RANKING -----")
             for jogador_temp in ranking:
-                self.__tela_jogador.mostrar_mensagem(f'{contador} - {jogador_temp.nome}')
-                self.__tela_jogador.mostrar_mensagem(f'Pontuação: {jogador_temp.pontuacao}')
-                self.__tela_jogador.mostrar_mensagem("")
+                self.__tela_jogador.mostrar_mensagem(f'{contador} - {jogador_temp.nome} -> Pontuação: {jogador_temp.pontuacao}')
                 contador -= 1
 
     def del_jogador(self):
         while True:
             self.listar_jogadores()
             dados = self.__tela_jogador.selecionar_jogador()
+            if dados is None:
+                return
             jogador_temp = self.pega_jogador_pelo_nome(dados["nome"])
             if jogador_temp is not None:
                 if jogador_temp.senha == dados["senha"]:
@@ -77,23 +79,27 @@ class ControladorJogador:
             if len(self.__jogadores) != 0:
                 self.listar_jogadores()
                 dados = self.__tela_jogador.selecionar_jogador()
+                if dados is None:
+                    return
                 jogador_temp = self.pega_jogador_pelo_nome(dados["nome"])
                 if jogador_temp is not None:
                     if jogador_temp.senha == dados["senha"]:
                         lista_opcoes = {"nome": 1, "senha": 2, "data_nascimento": 3, "retornar": 0}
                         opcao = self.__tela_jogador.opcoes_alterar_cadastro()
+                        if opcao is None:
+                            return
                         if opcao == "":
                             self.__tela_jogador.mostrar_mensagem("Opção inválida")
                             return
-                        elif int(opcao) == lista_opcoes["nome"]:
+                        elif opcao == 'Nome':
                             jogador_temp.nome = self.__tela_jogador.alterar_nome()
                             self.__tela_jogador.mostrar_mensagem("Nome alterado com sucesso!")
                             return
-                        elif int(opcao) == lista_opcoes["senha"]:
+                        elif opcao == 'Senha':
                             jogador_temp.senha = self.__tela_jogador.alterar_senha()
                             self.__tela_jogador.mostrar_mensagem("Senha alterada com sucesso!")
                             return
-                        elif int(opcao) == lista_opcoes["data_nascimento"]:
+                        elif opcao == 'Data de nascimento':
                             jogador_temp.data_nascimento = self.__tela_jogador.alterar_data_nascimento()
                             self.__tela_jogador.mostrar_mensagem("Data de nascimento alterada com sucesso!")
                             return
@@ -114,15 +120,14 @@ class ControladorJogador:
         while True:
             self.listar_jogadores()
             dados = self.__tela_jogador.selecionar_jogador()
+            if dados is None:
+                return
             jogador_temp = self.pega_jogador_pelo_nome(dados["nome"])
             contador = 1
             if jogador_temp is not None:
                 for partida in jogador_temp.partidas:
-                    self.__tela_jogador.mostrar_mensagem(f'----- PARTIDA {contador} -----')
-                    self.__tela_jogador.mostrar_mensagem(f'Resultado: {partida.resultado}')
-                    self.__tela_jogador.mostrar_mensagem(f'Data: {partida.data}')
-                    self.__tela_jogador.mostrar_mensagem(f'Hora: {partida.hora}')
-                    self.__tela_jogador.mostrar_jogadas(partida.oceano_jogador.tiros_realizados)
+                    jogadas = " ".join(partida.oceano_jogador.tiros_realizados)
+                    self.__tela_jogador.mostrar_partida(partida, jogadas, contador)
                     contador += 1
                 return
             else:
@@ -140,8 +145,7 @@ class ControladorJogador:
             opcao_escolhida = self.__tela_jogador.tela_opcoes()
             if opcao_escolhida == "":
                 self.__tela_jogador.mostrar_mensagem("Opção inválida")
-            elif int(opcao_escolhida) in lista_opcoes:
-                opcao_escolhida = int(opcao_escolhida)
+            elif opcao_escolhida in lista_opcoes:
                 funcao_escolhida = lista_opcoes[opcao_escolhida]
                 funcao_escolhida()
             else:

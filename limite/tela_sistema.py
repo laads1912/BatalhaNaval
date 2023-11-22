@@ -1,4 +1,4 @@
-#import PySimpleGui as sg
+# import PySimpleGui as sg
 
 # class TelaSistema:
 #
@@ -14,38 +14,32 @@
 #         return print(texto)
 
 import PySimpleGUI as sg
+
+
 class TelaSistema:
 
     def __init__(self):
-        sg.theme('DarkGrey2')
-        self.__layout = [
-            [sg.Text('----- BATALHA NAVAL -----')],
-            [sg.Button('Iniciar Partida', size=(20, 2))],
-            [sg.Button('Gerenciar Jogadores', size=(20, 2))],
-            [sg.Button('Fechar Jogo', size=(20, 2))],
-            [sg.Button('Partida Teste', size=(20, 2))]
-        ]
-
-        self.janela = sg.Window('Batalha Naval', self.__layout)
+        self.__window = None
+        self.init_components()
 
     def tela_opcoes(self):
-        while True:
-            event, values = self.janela.read()
+        self.init_components()
+        event, values = self.__window.read()
 
-            if event == sg.WINDOW_CLOSED or event == 'Fechar Jogo':
-                break
+        if event == sg.WINDOW_CLOSED or event == 'Fechar Jogo':
+            return 0
 
-            elif event == 'Iniciar Partida':
-                self.janela.close()
-                return 1
+        elif event == 'Iniciar Partida':
+            self.__window.close()
+            return 1
 
-            elif event == 'Gerenciar Jogadores':
-                self.janela.close()
-                return 2
+        elif event == 'Gerenciar Jogadores':
+            self.__window.close()
+            return 2
 
-            elif event == 'Partida Teste':
-                self.janela.close()
-                return 123
+        elif event == 'Partida Teste':
+            self.__window.close()
+            return 123
 
     def mostrar_mensagem(self, mensagem):
         layout = [
@@ -61,3 +55,14 @@ class TelaSistema:
             if event == sg.WINDOW_CLOSED or event == 'OK':
                 window.close()
                 break
+
+    def init_components(self):
+        sg.theme('DarkGrey2')
+        layout = [
+            [sg.Text('----- BATALHA NAVAL -----')],
+            [sg.Button('Iniciar Partida', size=(20, 2))],
+            [sg.Button('Gerenciar Jogadores', size=(20, 2))],
+            [sg.Button('Fechar Jogo', size=(20, 2))],
+            [sg.Button('Partida Teste', size=(20, 2))]
+        ]
+        self.__window = sg.Window('Batalha Naval', layout)

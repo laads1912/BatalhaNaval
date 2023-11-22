@@ -20,6 +20,8 @@ class ControladorPartida:
     def iniciar_partida(self):
         while True:
             dados = self.__tela_partida.iniciar_partida()
+            if dados is None:
+                self.__controlador_sistema.abre_tela()
             self.__jogador = self.__controlador_sistema.controlador_jogador.pega_jogador_pelo_nome(dados["nome"])
             if self.__jogador is None:
                 self.__tela_partida.mostrar_mensagem("Esse jogador não está cadastrado, favor verifique os jogadores "
@@ -463,6 +465,8 @@ class ControladorPartida:
     def partida_teste(self):
         while True:
             dados = self.__tela_partida.iniciar_partida()
+            if dados is None:
+                self.__controlador_sistema.abre_tela()
             self.__jogador = self.__controlador_sistema.controlador_jogador.pega_jogador_pelo_nome(dados["nome"])
             if self.__jogador is None:
                 self.__tela_partida.mostrar_mensagem("Esse jogador não está cadastrado, favor verifique os jogadores "

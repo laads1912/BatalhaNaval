@@ -58,49 +58,40 @@
 
 import PySimpleGUI as sg
 
+
 class TelaJogador:
     def __init__(self):
         sg.theme('DarkGrey5')
+        self.__window = None
+        self.init_opcoes()
 
     def tela_opcoes(self):
-        layout = [
-            [sg.Text('----- JOGADORES -----', font=('Arial', 16), justification='center')],
-            [sg.Button('Cadastrar jogador', size=(25, 2))],
-            [sg.Button('Mostrar ranking dos jogadores', size=(25, 2))],
-            [sg.Button('Excluir jogador', size=(25, 2))],
-            [sg.Button('Alterar cadastro', size=(25, 2))],
-            [sg.Button('Mostrar histórico de partidas', size=(25, 2))],
-            [sg.Button('Retornar', size=(25, 2))]
-        ]
+        self.init_opcoes()
+        event, values = self.__window.read()
 
-        window = sg.Window('Opções de Jogadores', layout, element_justification='center')
+        if event == sg.WINDOW_CLOSED or event == 'Retornar':
+            self.__window.close()
+            return 0
 
-        while True:
-            event, values = window.read()
+        elif event == 'Cadastrar jogador':
+            self.__window.close()
+            return 1
 
-            if event == sg.WINDOW_CLOSED or event == 'Retornar':
-                window.close()
-                return 0
+        elif event == 'Mostrar ranking dos jogadores':
+            self.__window.close()
+            return 2
 
-            elif event == 'Cadastrar jogador':
-                window.close()
-                return 1
+        elif event == 'Excluir jogador':
+            self.__window.close()
+            return 3
 
-            elif event == 'Mostrar ranking dos jogadores':
-                window.close()
-                return 2
+        elif event == 'Alterar cadastro':
+            self.__window.close()
+            return 4
 
-            elif event == 'Excluir jogador':
-                window.close()
-                return 3
-
-            elif event == 'Alterar cadastro':
-                window.close()
-                return 4
-
-            elif event == 'Mostrar histórico de partidas':
-                window.close()
-                return 5
+        elif event == 'Mostrar histórico de partidas':
+            self.__window.close()
+            return 5
 
     def pegar_dados_jogador(self):
         layout = [
@@ -111,17 +102,17 @@ class TelaJogador:
             [sg.Button('Cadastrar', size=(10, 2)), sg.Button('Cancelar', size=(10, 2))]
         ]
 
-        window = sg.Window('Dados do Jogador', layout, element_justification='center')
+        self.__window = sg.Window('Dados do Jogador', layout, element_justification='center')
 
         while True:
-            event, values = window.read()
+            event, values = self.__window.read()
 
             if event == sg.WINDOW_CLOSED or event == 'Cancelar':
-                window.close()
+                self.__window.close()
                 return None
 
             elif event == 'Cadastrar':
-                window.close()
+                self.__window.close()
                 return {"nome": values['nome'], "senha": values['senha'], "data_nascimento": values['data_nascimento']}
 
     def selecionar_jogador(self):
@@ -132,17 +123,17 @@ class TelaJogador:
             [sg.Button('Selecionar', size=(10, 2)), sg.Button('Cancelar', size=(10, 2))]
         ]
 
-        window = sg.Window('Selecionar Jogador', layout, element_justification='center', size=(400, 150))
+        self.__window = sg.Window('Selecionar Jogador', layout, element_justification='center', size=(400, 150))
 
         while True:
-            event, values = window.read()
+            event, values = self.__window.read()
 
             if event == sg.WINDOW_CLOSED or event == 'Cancelar':
-                window.close()
+                self.__window.close()
                 return None
 
             elif event == 'Selecionar':
-                window.close()
+                self.__window.close()
                 return {"nome": values['nome'], "senha": values['senha']}
 
     def mostrar_jogador(self, dados_jogador):
@@ -153,13 +144,13 @@ class TelaJogador:
             [sg.Button('Fechar', size=(10, 2))]
         ]
 
-        window = sg.Window('Jogador', layout, element_justification='center')
+        self.__window = sg.Window('Jogador', layout, element_justification='center')
 
         while True:
-            event, values = window.read()
+            event, values = self.__window.read()
 
             if event == sg.WINDOW_CLOSED or event == 'Fechar':
-                window.close()
+                self.__window.close()
                 break
 
     def opcoes_alterar_cadastro(self):
@@ -171,16 +162,17 @@ class TelaJogador:
             [sg.Button('Retornar', size=(20, 2))]
         ]
 
-        window = sg.Window('Opções de Alteração de Cadastro', layout, element_justification='center')
+        self.__window = sg.Window('Opções de Alteração de Cadastro', layout, element_justification='center')
 
         while True:
-            event, values = window.read()
+            event, values = self.__window.read()
 
             if event == sg.WINDOW_CLOSED or event == 'Retornar':
-                window.close()
+                self.__window.close()
                 return None
-
-            return event
+            else:
+                self.__window.close()
+                return event
 
     def alterar_nome(self):
         layout = [
@@ -189,17 +181,17 @@ class TelaJogador:
             [sg.Button('Confirmar', size=(10, 2)), sg.Button('Cancelar', size=(10, 2))]
         ]
 
-        window = sg.Window('Alterar Nome', layout, element_justification='center')
+        self.__window = sg.Window('Alterar Nome', layout, element_justification='center')
 
         while True:
-            event, values = window.read()
+            event, values = self.__window.read()
 
             if event == sg.WINDOW_CLOSED or event == 'Cancelar':
-                window.close()
+                self.__window.close()
                 return None
 
             elif event == 'Confirmar':
-                window.close()
+                self.__window.close()
                 return values['nome']
 
     def alterar_senha(self):
@@ -209,17 +201,17 @@ class TelaJogador:
             [sg.Button('Confirmar', size=(10, 2)), sg.Button('Cancelar', size=(10, 2))]
         ]
 
-        window = sg.Window('Alterar Senha', layout, element_justification='center')
+        self.__window = sg.Window('Alterar Senha', layout, element_justification='center')
 
         while True:
-            event, values = window.read()
+            event, values = self.__window.read()
 
             if event == sg.WINDOW_CLOSED or event == 'Cancelar':
-                window.close()
+                self.__window.close()
                 return None
 
             elif event == 'Confirmar':
-                window.close()
+                self.__window.close()
                 return values['senha']
 
     def alterar_data_nascimento(self):
@@ -229,17 +221,17 @@ class TelaJogador:
             [sg.Button('Confirmar', size=(10, 2)), sg.Button('Cancelar', size=(10, 2))]
         ]
 
-        window = sg.Window('Alterar Data de Nascimento', layout, element_justification='center')
+        self.__window = sg.Window('Alterar Data de Nascimento', layout, element_justification='center')
 
         while True:
-            event, values = window.read()
+            event, values = self.__window.read()
 
             if event == sg.WINDOW_CLOSED or event == 'Cancelar':
-                window.close()
+                self.__window.close()
                 return None
 
             elif event == 'Confirmar':
-                window.close()
+                self.__window.close()
                 return values['data_nascimento']
 
     def mostrar_mensagem(self, mensagem):
@@ -248,11 +240,44 @@ class TelaJogador:
             [sg.Button('OK', size=(10, 2))]
         ]
 
-        window = sg.Window('Mensagem', layout, element_justification='center', size=(300, 75))
+        self.__window = sg.Window('Mensagem', layout, element_justification='center', size=(600, 75))
 
         while True:
-            event, values = window.read()
+            event, values = self.__window.read()
 
             if event == sg.WINDOW_CLOSED or event == 'OK':
-                window.close()
+                self.__window.close()
+                break
+
+    def init_opcoes(self):
+        layout = [
+            [sg.Text('----- JOGADORES -----', font=('Arial', 16), justification='center')],
+            [sg.Button('Cadastrar jogador', size=(25, 2))],
+            [sg.Button('Mostrar ranking dos jogadores', size=(25, 2))],
+            [sg.Button('Excluir jogador', size=(25, 2))],
+            [sg.Button('Alterar cadastro', size=(25, 2))],
+            [sg.Button('Mostrar histórico de partidas', size=(25, 2))],
+            [sg.Button('Retornar', size=(25, 2))]
+        ]
+
+        self.__window = sg.Window('Opções de Jogadores', layout, element_justification='center')
+
+    def mostrar_partida(self, partida, jogadas, contador):
+        layout = [
+            [sg.Text(f'----- PARTIDA {contador} -----', font=('Arial', 16), justification='center')],
+            [sg.Text(f'Resultado: {partida.resultado}', font=('Arial', 16), justification='center')],
+            [sg.Text('Mostrar ranking dos jogadores', font=('Arial', 16), justification='center')],
+            [sg.Text(f'Data: {partida.data}', font=('Arial', 16), justification='center')],
+            [sg.Text(f'Hora: {partida.hora}', font=('Arial', 16), justification='center')],
+            [sg.Text(f'Jogadas: {jogadas}', font=('Arial', 16), justification='center')],
+            [sg.Button('Retornar', size=(25, 2))]
+        ]
+
+        self.__window = sg.Window('Histórico', layout, element_justification='center')
+
+        while True:
+            event, values = self.__window.read()
+
+            if event == sg.WINDOW_CLOSED or event == 'Retornar':
+                self.__window.close()
                 break

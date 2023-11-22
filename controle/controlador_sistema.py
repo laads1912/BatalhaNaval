@@ -36,8 +36,7 @@ class ControladorSistema:
             opcao_escolhida = self.__tela_sistema.tela_opcoes()
             if opcao_escolhida == "":
                 self.__tela_sistema.mostrar_mensagem("Opção inválida")
-            elif int(opcao_escolhida) in lista_opcoes:
-                opcao_escolhida = int(opcao_escolhida)
+            elif opcao_escolhida in lista_opcoes:
                 funcao_escolhida = lista_opcoes[opcao_escolhida]
                 funcao_escolhida()
             else:
