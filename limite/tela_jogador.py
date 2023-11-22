@@ -78,9 +78,9 @@ class TelaJogador:
         while True:
             event, values = window.read()
 
-            if event == sg.WINDOW_CLOSED:
+            if event == sg.WINDOW_CLOSED or event == 'Retornar':
                 window.close()
-                return None
+                return 0
 
             elif event == 'Cadastrar jogador':
                 window.close()
@@ -102,9 +102,6 @@ class TelaJogador:
                 window.close()
                 return 5
 
-            elif event == 'Retornar':
-                window.close()
-                return 0
     def pegar_dados_jogador(self):
         layout = [
             [sg.Text('-------- DADOS JOGADOR ----------', font=('Helvetica', 16), justification='center')],
