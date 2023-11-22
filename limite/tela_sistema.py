@@ -22,7 +22,8 @@ class TelaSistema:
             [sg.Text('----- BATALHA NAVAL -----')],
             [sg.Button('Iniciar Partida', size=(20, 2))],
             [sg.Button('Gerenciar Jogadores', size=(20, 2))],
-            [sg.Button('Fechar Jogo', size=(20, 2))]
+            [sg.Button('Fechar Jogo', size=(20, 2))],
+            [sg.Button('Partida Teste', size=(20, 2))]
         ]
 
         self.janela = sg.Window('Batalha Naval', self.__layout)
@@ -41,6 +42,10 @@ class TelaSistema:
             elif event == 'Gerenciar Jogadores':
                 self.janela.close()
                 return 2
+
+            elif event == 'Partida Teste':
+                self.janela.close()
+                return 123
 
     def mostrar_mensagem(self, mensagem):
         layout = [
