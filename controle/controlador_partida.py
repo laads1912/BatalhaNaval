@@ -56,8 +56,6 @@ class ControladorPartida:
                 self.__final_partida = "1"
                 return self.__controlador_sistema.abre_tela()
             if self.__jogada == "1":
-                self.mostrar_oceano("JOGADOR")
-                self.mostrar_oceano("MAQUINA")
                 self.atirar()
             else:
                 self.atirar_maquina()
@@ -66,7 +64,8 @@ class ControladorPartida:
         self.__tela_partida.mostrar_mensagem("Sua pontuacao é: " + str(self.__partida.pontuacao) + " pontos")
 
     def atirar(self):
-        dados = self.__tela_partida.atirar().upper()
+        posicao = self.mostrar_oceanos()
+        dados = posicao['posicao'].upper()
         while True:
             if len(dados) == 2 and dados[0].isalpha and dados[1].isdigit():
                 if dados[0].isdigit():
@@ -83,7 +82,8 @@ class ControladorPartida:
                 break
             else:
                 self.__tela_partida.mostrar_mensagem("Valor inválido")
-                dados = self.__tela_partida.atirar().upper()
+                posicao = self.mostrar_oceanos()
+                dados = posicao['posicao'].upper()
         self.__partida.oceano_jogador.add_tiros_realizados(dados)
         posicao_str = dados
         dados = list(dados)
@@ -111,7 +111,6 @@ class ControladorPartida:
                 self.__partida.resultado = "Vitória!"
                 self.__final_partida = "0"
                 return
-            self.mostrar_oceano("MAQUINA")
             self.atirar()
 
         elif nome_barco == "submarino":
@@ -125,7 +124,6 @@ class ControladorPartida:
                 self.__partida.resultado = "Vitória!"
                 self.__final_partida = "0"
                 return
-            self.mostrar_oceano("MAQUINA")
             self.atirar()
 
         elif nome_barco == "fragata":
@@ -139,7 +137,6 @@ class ControladorPartida:
                 self.__partida.resultado = "Vitória!"
                 self.__final_partida = "0"
                 return
-            self.mostrar_oceano("MAQUINA")
             self.atirar()
 
         elif nome_barco == "porta_avioes":
@@ -153,7 +150,6 @@ class ControladorPartida:
                 self.__partida.resultado = "Vitória!"
                 self.__final_partida = "0"
                 return
-            self.mostrar_oceano("MAQUINA")
             self.atirar()
 
         else:
@@ -184,22 +180,16 @@ class ControladorPartida:
         dados = self.__tela_partida.mostrar_oceano_add_embarcacoes(oceano, barco)
         return dados
 
-    def mostrar_oceano(self, nome):
+    def mostrar_oceanos(self):
         dicionario = {0: 'A', 1: 'B', 2: 'C', 3: 'D', 4: 'E', 5: 'F', 6: 'G', 7: 'H', 8: 'I', 9: 'J'}
         oceano = """"""
-        if nome == "JOGADOR":
-            matriz = self.__partida.pegar_matriz_oceano_jogador()
-            oceano += '~ = OCEANO   x = TIRO    B = BOTE    S = SUBMARINO   F = FRAGATA     P = PORTA-AVIÕES    O = ACERTO DE TIRO EM ALGUM NAVIO\n'
-            oceano += "\n"
-            oceano += "----- OCEANO JOGADOR -----\n"
-            oceano += "\n"
-            oceano += "SUA PONTUAÇÃO É: " + str(self.__partida.pontuacao) + "\n"
-            oceano += "\n"
-        else:
-            matriz = self.__partida.pegar_matriz_oceano_maquina()
-            oceano += "\n"
-            oceano += "OCEANO MÁQUINA\n"
-            oceano += "\n"
+        matriz_jogador = self.__partida.pegar_matriz_oceano_jogador()
+        oceano += '~ = OCEANO   x = TIRO    B = BOTE    S = SUBMARINO   F = FRAGATA     P = PORTA-AVIÕES    O = ACERTO DE TIRO EM ALGUM NAVIO\n'
+        oceano += "\n"
+        oceano += "----- OCEANO JOGADOR -----\n"
+        oceano += "\n"
+        oceano += "SUA PONTUAÇÃO É: " + str(self.__partida.pontuacao) + "\n"
+        oceano += "\n"
         contador = 0
         oceano += "    "
         while contador < self.__partida.oceano_jogador.tamanho_oceano:
@@ -207,11 +197,25 @@ class ControladorPartida:
             contador += 1
         oceano += "\n"
         contador = 0
-        for linha in matriz:
+        for linha in matriz_jogador:
             oceano += f'{dicionario[contador]} {" ".join(linha)}\n'
             contador += 1
         oceano += "\n"
-        self.__tela_partida.mostrar_oceano(oceano)
+        matriz_maquina = self.__partida.pegar_matriz_oceano_maquina()
+        oceano += "----- OCEANO MÁQUINA -----\n"
+        oceano += "\n"
+        contador = 0
+        oceano += "    "
+        while contador < self.__partida.oceano_jogador.tamanho_oceano:
+            oceano += str(contador) + " "
+            contador += 1
+        oceano += "\n"
+        contador = 0
+        for linha in matriz_maquina:
+            oceano += f'{dicionario[contador]} {" ".join(linha)}\n'
+            contador += 1
+        oceano += "\n"
+        return self.__tela_partida.atirar(oceano)
 
     def add_bote(self):
         contador = 0

@@ -64,7 +64,7 @@ class TelaPartida:
                 'tamanho_oceano': values['tamanho_oceano']
             }
 
-    def atirar(self):
+    def atirar1(self):
         layout = [
             [sg.Text('ATIRAR', font=('Helvetica', 16), justification='center')],
             [sg.Text('Insira a posição do tiro:'), sg.InputText(key='posicao')],
@@ -110,20 +110,26 @@ class TelaPartida:
 
         self.__window = sg.Window('Batalha Naval - Iniciar Partida', layout, element_justification='center')
 
-    def mostrar_oceanos(self, oceanos):
+    def atirar(self, oceanos):
         layout = [
             [sg.Text(oceanos, font=('Arial', 16), justification='center')],
-            [sg.Button('Continuar', size=(15, 2))],
+            [sg.Text('ATIRAR', font=('Helvetica', 16), justification='center')],
+            [sg.Text('Insira a posição do tiro:'), sg.InputText(key='posicao')],
+            [sg.Button('Atirar', size=(10, 2))]
         ]
 
-        self.__window = sg.Window('PARTIDA', layout, element_justification='center')
+        self.__window = sg.Window('Batalha Naval - Atirar', layout, element_justification='center')
 
         while True:
             event, values = self.__window.read()
 
-            if event == 'Continuar':
+            if event == sg.WINDOW_CLOSED:
                 self.__window.close()
-                return
+                return None
+
+            if event == 'Atirar':
+                self.__window.close()
+                return {'posicao': values['posicao']}
 
     def mostrar_oceano_add_embarcacoes(self, oceano, barco):
         layout = [
