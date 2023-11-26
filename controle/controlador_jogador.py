@@ -1,16 +1,18 @@
 from entidade.jogador import Jogador
 from limite.tela_jogador import TelaJogador
 from entidade.partida import Partida
+from entidade.jogador_dao import JogadorDAO
 
 
 class ControladorJogador:
     def __init__(self, controlador_sistema):
-        self.__jogadores = []
         self.__tela_jogador = TelaJogador()
         self.__controlador_sistema = controlador_sistema
+        self.__jogador_DAO = JogadorDAO()
 
     def pega_jogador_pelo_nome(self, nome: str):
-        for jogador_temp in self.__jogadores:
+        jogadores = self.__jogador_DAO.get_all()
+        for jogador_temp in jogadores:
             if jogador_temp.nome == nome:
                 return jogador_temp
         return None
@@ -22,7 +24,7 @@ class ControladorJogador:
                 return
             jogador_temp = Jogador(dados["nome"], dados["senha"], dados["data_nascimento"])
             if dados["nome"] != "" and dados["senha"] != "" and dados["data_nascimento"]:
-                self.__jogadores.append(jogador_temp)
+                self.__jogador_DAO.add(jogador_temp)
                 return
             else:
                 self.__tela_jogador.mostrar_mensagem("Por favor preencha todos os campos.")
@@ -30,15 +32,22 @@ class ControladorJogador:
 
     def listar_jogadores(self):
         self.__tela_jogador.mostrar_mensagem("----- LISTA DE JOGADORES -----")
-        for jogador_temp in self.__jogadores:
+        jogadores = self.__jogador_DAO.get_all()
+        if jogadores is None:
+            self.__tela_jogador.mostrar_mensagem("Nenhum jogador cadastrado.")
+            return
+        for jogador_temp in jogadores:
             dados_jogador = {"nome": jogador_temp.nome, "data_nascimento": jogador_temp.data_nascimento}
             self.__tela_jogador.mostrar_jogador(dados_jogador)
 
     def mostrar_ranking(self):
-        if len(self.__jogadores) == 0:
+        jogadores = self.__jogador_DAO.get_all()
+        jogadores_temp = list(jogadores)
+        if jogadores is None:
+            self.__tela_jogador.mostrar_mensagem("Nenhum jogador cadastrado.")
+        elif len(jogadores) == 0:
             self.__tela_jogador.mostrar_mensagem("Nenhum jogador cadastrado.")
         else:
-            jogadores_temp = self.__jogadores[:]
             ranking = []
             while len(jogadores_temp) != 0:
                 maior_pontuacao = 0
@@ -49,7 +58,7 @@ class ControladorJogador:
                 ranking.append(melhor_jogador)
                 jogadores_temp.remove(melhor_jogador)
 
-            contador = len(self.__jogadores)
+            contador = len(jogadores)
             self.__tela_jogador.mostrar_mensagem("----- RANKING -----")
             for jogador_temp in ranking:
                 self.__tela_jogador.mostrar_mensagem(f'{contador} - {jogador_temp.nome} -> Pontuação: {jogador_temp.pontuacao}')
@@ -61,10 +70,10 @@ class ControladorJogador:
             dados = self.__tela_jogador.selecionar_jogador()
             if dados is None:
                 return
-            jogador_temp = self.pega_jogador_pelo_nome(dados["nome"])
+            jogador_temp = self.__jogador_DAO.get(dados["nome"])
             if jogador_temp is not None:
                 if jogador_temp.senha == dados["senha"]:
-                    self.__jogadores.remove(jogador_temp)
+                    self.__jogador_DAO.remove(jogador_temp.nome)
                     self.listar_jogadores()
                     return
                 else:
@@ -75,13 +84,17 @@ class ControladorJogador:
                 return
 
     def alterar_cadastro(self):
+        jogadores = self.__jogador_DAO.get_all()
         while True:
-            if len(self.__jogadores) != 0:
+            if jogadores is None:
+                self.__tela_jogador.mostrar_mensagem("Nenhum jogador cadastrado")
+                return
+            elif len(jogadores) != 0:
                 self.listar_jogadores()
                 dados = self.__tela_jogador.selecionar_jogador()
                 if dados is None:
                     return
-                jogador_temp = self.pega_jogador_pelo_nome(dados["nome"])
+                jogador_temp = self.__jogador_DAO.get(dados["nome"])
                 if jogador_temp is not None:
                     if jogador_temp.senha == dados["senha"]:
                         lista_opcoes = {"nome": 1, "senha": 2, "data_nascimento": 3, "retornar": 0}
@@ -122,7 +135,7 @@ class ControladorJogador:
             dados = self.__tela_jogador.selecionar_jogador()
             if dados is None:
                 return
-            jogador_temp = self.pega_jogador_pelo_nome(dados["nome"])
+            jogador_temp = self.__jogador_DAO.get(dados["nome"])
             contador = 1
             if jogador_temp is not None:
                 for partida in jogador_temp.partidas:
