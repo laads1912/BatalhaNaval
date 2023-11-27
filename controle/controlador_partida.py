@@ -2,6 +2,8 @@ from entidade.partida import Partida
 from limite.tela_partida import TelaPartida
 from entidade.jogador import Jogador
 import random
+from senhaErradaException import SenhaErradaException
+from posicaoInvalidaException import PosicaoInvalidaEception
 
 
 class ControladorPartida:
@@ -30,19 +32,22 @@ class ControladorPartida:
                 return
 
             if self.__jogador is not None:
-                if self.__jogador.senha == dados["senha"]:
-                    tamanho_oceano = int(dados["tamanho_oceano"])
-                    if 10 >= tamanho_oceano >= 7:
-                        if isinstance(self.__jogador, Jogador) and isinstance(tamanho_oceano, int):
-                            self.__partida = Partida(self.__jogador, tamanho_oceano)
-                            self.add_embarcacoes()
-                            self.add_embarcacoes_maquina()
-                            self.continuar_partida()
-                            break
+                try:
+                    if self.__jogador.senha == dados["senha"]:
+                        tamanho_oceano = int(dados["tamanho_oceano"])
+                        if 10 >= tamanho_oceano >= 7:
+                            if isinstance(self.__jogador, Jogador) and isinstance(tamanho_oceano, int):
+                                self.__partida = Partida(self.__jogador, tamanho_oceano)
+                                self.add_embarcacoes()
+                                self.add_embarcacoes_maquina()
+                                self.continuar_partida()
+                                break
+                        else:
+                            self.__tela_partida.mostrar_mensagem("Tamanho do oceano inválido.")
+                            return
                     else:
-                        self.__tela_partida.mostrar_mensagem("Tamanho do oceano inválido.")
-                        return
-                else:
+                        raise SenhaErradaException
+                except SenhaErradaException:
                     self.__tela_partida.mostrar_mensagem("Senha inválida.")
                     return
             else:
@@ -65,98 +70,99 @@ class ControladorPartida:
         self.__tela_partida.mostrar_mensagem("Sua pontuacao é: " + str(self.__partida.pontuacao) + " pontos")
 
     def atirar(self):
-        posicao = self.mostrar_oceanos()
-        dados = posicao['posicao'].upper()
-        while True:
-            if len(dados) == 2 and dados[0].isalpha and dados[1].isdigit():
-                if dados[0].isdigit():
-                    self.__tela_partida.mostrar_mensagem("Posição fornecida é inválida.")
+        try:
+            posicao = self.mostrar_oceanos()
+            dados = posicao['posicao'].upper()
+            while True:
+                if len(dados) == 2 and dados[0].isalpha and dados[1].isdigit():
+                    if dados[0].isdigit():
+                        raise PosicaoInvalidaEception
+                    elif self.__dict_posicao[dados[0]] >= self.__partida.oceano_jogador.tamanho_oceano or int(
+                            dados[1]) >= self.__partida.oceano_jogador.tamanho_oceano:
+                        raise PosicaoInvalidaEception
+                    tiros_realizados = self.__partida.oceano_jogador.tiros_realizados
+                    if dados in tiros_realizados:
+                        self.__tela_partida.mostrar_mensagem("Você já atirou nessa posição")
+                        return
+                    break
+                else:
+                    raise PosicaoInvalidaEception
+                    posicao = self.mostrar_oceanos()
+                    dados = posicao['posicao'].upper()
+            self.__partida.oceano_jogador.add_tiros_realizados(dados)
+            posicao_str = dados
+            dados = list(dados)
+            posicao = [self.__dict_posicao[dados[0]], int(dados[1])]
+            matriz = self.__partida.pegar_matriz_oceano_maquina()
+            posicao_barcos_maquina = self.__partida.oceano_maquina.posicoes_barcos
+            matriz[posicao[0]][posicao[1]] = "X"
+            nome_barco = ""
+            for barco, lista_posicao in posicao_barcos_maquina.items():
+                if posicao_str in lista_posicao:
+                    nome_barco = barco.nome
+                    if nome_barco != "bote":
+                        lista_posicao.remove(posicao_str)
+                    if len(lista_posicao) == 0:
+                        self.__partida.add_pontuacao(3)
+
+            if nome_barco == "bote":
+                self.__partida.add_contador()
+                self.__tela_partida.mostrar_mensagem("VOCÊ ACERTOU UM BOTE!")
+                self.__partida.oceano_jogador.add_tiros_acertado(posicao_str)
+                self.__partida.add_pontuacao(4)
+                matriz[posicao[0]][posicao[1]] = "B"
+                if self.__partida.contador == 17:
+                    self.__tela_partida.mostrar_mensagem("Você Ganhou!")
+                    self.__partida.resultado = "Vitória!"
+                    self.__final_partida = "0"
                     return
-                elif self.__dict_posicao[dados[0]] >= self.__partida.oceano_jogador.tamanho_oceano or int(
-                        dados[1]) >= self.__partida.oceano_jogador.tamanho_oceano:
-                    self.__tela_partida.mostrar_mensagem("Posição fornecida é inválida.")
+                self.atirar()
+
+            elif nome_barco == "submarino":
+                self.__partida.add_contador()
+                self.__tela_partida.mostrar_mensagem("VOCÊ ACERTOU UM SUBMARINO!")
+                self.__partida.oceano_jogador.add_tiros_acertado(posicao_str)
+                self.__partida.add_pontuacao(1)
+                matriz[posicao[0]][posicao[1]] = "S"
+                if self.__partida.contador == 17:
+                    self.__tela_partida.mostrar_mensagem("Você Ganhou!")
+                    self.__partida.resultado = "Vitória!"
+                    self.__final_partida = "0"
                     return
-                tiros_realizados = self.__partida.oceano_jogador.tiros_realizados
-                if dados in tiros_realizados:
-                    self.__tela_partida.mostrar_mensagem("Você já atirou nessa posição")
+                self.atirar()
+
+            elif nome_barco == "fragata":
+                self.__partida.add_contador()
+                self.__tela_partida.mostrar_mensagem("VOCÊ ACERTOU UMA FRAGATA!")
+                self.__partida.oceano_jogador.add_tiros_acertado(posicao_str)
+                self.__partida.add_pontuacao(1)
+                matriz[posicao[0]][posicao[1]] = "F"
+                if self.__partida.contador == 17:
+                    self.__tela_partida.mostrar_mensagem("Você Ganhou!")
+                    self.__partida.resultado = "Vitória!"
+                    self.__final_partida = "0"
                     return
-                break
+                self.atirar()
+
+            elif nome_barco == "porta_avioes":
+                self.__partida.add_contador()
+                self.__tela_partida.mostrar_mensagem("VOCÊ ACERTOU UM PORTA-AVIÕES!")
+                self.__partida.oceano_jogador.add_tiros_acertado(posicao_str)
+                self.__partida.add_pontuacao(1)
+                matriz[posicao[0]][posicao[1]] = "P"
+                if self.__partida.contador == 17:
+                    self.__tela_partida.mostrar_mensagem("Você Ganhou!")
+                    self.__partida.resultado = "Vitória!"
+                    self.__final_partida = "0"
+                    return
+                self.atirar()
+
             else:
-                self.__tela_partida.mostrar_mensagem("Valor inválido")
-                posicao = self.mostrar_oceanos()
-                dados = posicao['posicao'].upper()
-        self.__partida.oceano_jogador.add_tiros_realizados(dados)
-        posicao_str = dados
-        dados = list(dados)
-        posicao = [self.__dict_posicao[dados[0]], int(dados[1])]
-        matriz = self.__partida.pegar_matriz_oceano_maquina()
-        posicao_barcos_maquina = self.__partida.oceano_maquina.posicoes_barcos
-        matriz[posicao[0]][posicao[1]] = "X"
-        nome_barco = ""
-        for barco, lista_posicao in posicao_barcos_maquina.items():
-            if posicao_str in lista_posicao:
-                nome_barco = barco.nome
-                if nome_barco != "bote":
-                    lista_posicao.remove(posicao_str)
-                if len(lista_posicao) == 0:
-                    self.__partida.add_pontuacao(3)
-
-        if nome_barco == "bote":
-            self.__partida.add_contador()
-            self.__tela_partida.mostrar_mensagem("VOCÊ ACERTOU UM BOTE!")
-            self.__partida.oceano_jogador.add_tiros_acertado(posicao_str)
-            self.__partida.add_pontuacao(4)
-            matriz[posicao[0]][posicao[1]] = "B"
-            if self.__partida.contador == 17:
-                self.__tela_partida.mostrar_mensagem("Você Ganhou!")
-                self.__partida.resultado = "Vitória!"
-                self.__final_partida = "0"
-                return
-            self.atirar()
-
-        elif nome_barco == "submarino":
-            self.__partida.add_contador()
-            self.__tela_partida.mostrar_mensagem("VOCÊ ACERTOU UM SUBMARINO!")
-            self.__partida.oceano_jogador.add_tiros_acertado(posicao_str)
-            self.__partida.add_pontuacao(1)
-            matriz[posicao[0]][posicao[1]] = "S"
-            if self.__partida.contador == 17:
-                self.__tela_partida.mostrar_mensagem("Você Ganhou!")
-                self.__partida.resultado = "Vitória!"
-                self.__final_partida = "0"
-                return
-            self.atirar()
-
-        elif nome_barco == "fragata":
-            self.__partida.add_contador()
-            self.__tela_partida.mostrar_mensagem("VOCÊ ACERTOU UMA FRAGATA!")
-            self.__partida.oceano_jogador.add_tiros_acertado(posicao_str)
-            self.__partida.add_pontuacao(1)
-            matriz[posicao[0]][posicao[1]] = "F"
-            if self.__partida.contador == 17:
-                self.__tela_partida.mostrar_mensagem("Você Ganhou!")
-                self.__partida.resultado = "Vitória!"
-                self.__final_partida = "0"
-                return
-            self.atirar()
-
-        elif nome_barco == "porta_avioes":
-            self.__partida.add_contador()
-            self.__tela_partida.mostrar_mensagem("VOCÊ ACERTOU UM PORTA-AVIÕES!")
-            self.__partida.oceano_jogador.add_tiros_acertado(posicao_str)
-            self.__partida.add_pontuacao(1)
-            matriz[posicao[0]][posicao[1]] = "P"
-            if self.__partida.contador == 17:
-                self.__tela_partida.mostrar_mensagem("Você Ganhou!")
-                self.__partida.resultado = "Vitória!"
-                self.__final_partida = "0"
-                return
-            self.atirar()
-
-        else:
-            self.__tela_partida.mostrar_mensagem("ERROU!!")
-            self.__jogada = "0"
-
+                self.__tela_partida.mostrar_mensagem("ERROU!!")
+                self.__jogada = "0"
+        except PosicaoInvalidaEception:
+            self.__tela_partida.mostrar_mensagem("Posição Inválida")
+            return
     def mostrar_oceano_add_embarcacoes(self, barco):
         dicionario = {0: 'A', 1: 'B', 2: 'C', 3: 'D', 4: 'E', 5: 'F', 6: 'G', 7: 'H', 8: 'I', 9: 'J'}
         matriz = self.__partida.pegar_matriz_oceano_jogador()
@@ -219,171 +225,183 @@ class ControladorPartida:
         return self.__tela_partida.atirar(oceano)
 
     def add_bote(self):
-        contador = 0
-        while True:
-            if contador == 3:
-                break
-            else:
-                while True:
-                    dados = self.mostrar_oceano_add_embarcacoes("Bote")
-                    posicoes = dados['posicao'].upper()
-                    if len(posicoes) == 2 and posicoes[0].isalpha() and posicoes[1].isdigit():
-                        if self.__dict_posicao[posicoes[0]] >= self.__partida.oceano_jogador.tamanho_oceano or int(
-                                posicoes[1]) >= self.__partida.oceano_jogador.tamanho_oceano:
-                            self.__tela_partida.mostrar_mensagem("Posição fornecida é inválida.")
+        try:
+            contador = 0
+            while True:
+                if contador == 3:
+                    break
+                else:
+                    while True:
+                        dados = self.mostrar_oceano_add_embarcacoes("Bote")
+                        posicoes = dados['posicao'].upper()
+                        if len(posicoes) == 2 and posicoes[0].isalpha() and posicoes[1].isdigit():
+                            if self.__dict_posicao[posicoes[0]] >= self.__partida.oceano_jogador.tamanho_oceano or int(
+                                    posicoes[1]) >= self.__partida.oceano_jogador.tamanho_oceano:
+                                raise PosicaoInvalidaEception
+                            else:
+                                posicao_ocupada = False
+                                for posicao in self.__partida.oceano_jogador.posicoes_barcos.values():
+                                    if posicao == posicoes:
+                                        posicao_ocupada = True
+                                if posicao_ocupada:
+                                    self.__tela_partida.mostrar_mensagem("Posicão ocupada.")
+                                else:
+                                    self.__partida.add_barco_oceano(self.__partida.embarcacoes_jogador[contador], posicoes)
+                                    break
                         else:
+                            raise PosicaoInvalidaEception
+                contador += 1
+        except PosicaoInvalidaEception:
+            self.__tela_partida.mostrar_mensagem("Posição Inválida")
+
+    def add_submarino(self):
+        try:
+            contador = 3
+            while True:
+                if contador == 5:
+                    break
+                else:
+                    while True:
+                        dados = self.mostrar_oceano_add_embarcacoes("Submarino")
+                        posicoes = dados['posicao'].upper().split()
+                        if len(posicoes) == 2:
+                            condicao = True
+                            for posicao in posicoes:
+                                if posicao[0].isalpha() and posicao[1].isdigit():
+                                    if self.__dict_posicao[
+                                         posicao[0]] >= self.__partida.oceano_jogador.tamanho_oceano or int(
+                                         posicao[1]) >= self.__partida.oceano_jogador.tamanho_oceano:
+                                        condicao = False
+                                        break
+                                else:
+                                    condicao = False
+                                    break
+                            if condicao:
+                                posicao1 = posicoes[0]
+                                posicao2 = posicoes[1]
+                                if abs(self.__dict_posicao[posicao1[0]] - self.__dict_posicao[posicao2[0]]) <= 1 and \
+                                        abs(int(posicao1[1]) - int(posicao2[1])) <= 1:
+                                    posicao_ocupada = False
+                                    for posicoes2 in self.__partida.oceano_jogador.posicoes_barcos.values():
+                                        if posicao1 in posicoes2 or posicao2 in posicoes2:
+                                            posicao_ocupada = True
+                                    if posicao_ocupada:
+                                        self.__tela_partida.mostrar_mensagem("Posicão ocupada.")
+                                    else:
+                                        self.__partida.add_barco_oceano(self.__partida.embarcacoes_jogador[contador],
+                                                                        posicoes)
+                                        break
+                                else:
+                                    raise PosicaoInvalidaEception
+                            else:
+                                raise PosicaoInvalidaEception
+                        else:
+                            raise PosicaoInvalidaEception
+                contador += 1
+        except PosicaoInvalidaEception:
+            self.__tela_partida.mostrar_mensagem("Posição Inválida")
+
+    def add_fragata(self):
+        try:
+            contador = 5
+            while True:
+                if contador == 7:
+                    break
+                else:
+                    while True:
+                        dados = self.mostrar_oceano_add_embarcacoes("Fragata")
+                        posicoes = dados['posicao'].upper().split()
+                        if len(posicoes) == 3:
+                            condicao = True
+                            for posicao in posicoes:
+                                if posicao[0].isalpha() and posicao[1].isdigit():
+                                    if self.__dict_posicao[
+                                         posicao[0]] >= self.__partida.oceano_jogador.tamanho_oceano or int(
+                                         posicao[1]) >= self.__partida.oceano_jogador.tamanho_oceano:
+                                        condicao = False
+                                        break
+                                else:
+                                    condicao = False
+                                    break
+                            if condicao:
+                                posicao1 = posicoes[0]
+                                posicao2 = posicoes[1]
+                                posicao3 = posicoes[2]
+                                if abs(self.__dict_posicao[posicao1[0]] - self.__dict_posicao[posicao2[0]]) <= 1 and \
+                                        abs(int(posicao1[1]) - int(posicao2[1])) <= 1 and \
+                                        abs(self.__dict_posicao[posicao2[0]] - self.__dict_posicao[posicao3[0]]) <= 1 and \
+                                        abs(int(posicao2[1]) - int(posicao3[1])) <= 1 and \
+                                        (posicao1[0] == posicao2[0] == posicao3[0] or posicao1[1] == posicao2[1] ==
+                                         posicao3[1]):
+                                    posicao_ocupada = False
+                                    for posicoes2 in self.__partida.oceano_jogador.posicoes_barcos.values():
+                                        if posicao1 in posicoes2 or posicao2 in posicoes2 or posicao3 in posicoes2:
+                                            posicao_ocupada = True
+                                    if posicao_ocupada:
+                                        self.__tela_partida.mostrar_mensagem("Posicão ocupada.")
+                                    else:
+                                        self.__partida.add_barco_oceano(self.__partida.embarcacoes_jogador[contador],
+                                                                        posicoes)
+                                        break
+                                else:
+                                    raise PosicaoInvalidaEception
+                            else:
+                                raise PosicaoInvalidaEception
+                        else:
+                            raise PosicaoInvalidaEception
+                contador += 1
+        except PosicaoInvalidaEception:
+            self.__tela_partida.mostrar_mensagem("Posição Inválida")
+
+    def add_porta_avioes(self):
+        try:
+            while True:
+                dados = self.mostrar_oceano_add_embarcacoes("Porta Avioes")
+                posicoes = dados['posicao'].upper().split()
+                if len(posicoes) == 4:
+                    condicao = True
+                    for posicao in posicoes:
+                        if posicao[0].isalpha() and posicao[1].isdigit():
+                            if self.__dict_posicao[
+                                 posicao[0]] >= self.__partida.oceano_jogador.tamanho_oceano or int(
+                                 posicao[1]) >= self.__partida.oceano_jogador.tamanho_oceano:
+                                condicao = False
+                                break
+                        else:
+                            condicao = False
+                            break
+                    if condicao:
+                        posicao1 = posicoes[0]
+                        posicao2 = posicoes[1]
+                        posicao3 = posicoes[2]
+                        posicao4 = posicoes[3]
+                        if abs(self.__dict_posicao[posicao1[0]] - self.__dict_posicao[posicao2[0]]) <= 1 and \
+                                abs(int(posicao1[1]) - int(posicao2[1])) <= 1 and \
+                                abs(self.__dict_posicao[posicao2[0]] - self.__dict_posicao[posicao3[0]]) <= 1 and \
+                                abs(int(posicao2[1]) - int(posicao3[1])) <= 1 and \
+                                abs(self.__dict_posicao[posicao3[0]] - self.__dict_posicao[posicao4[0]]) <= 1 and \
+                                abs(int(posicao3[1]) - int(posicao4[1])) <= 1 and \
+                                (posicao1[0] == posicao2[0] == posicao3[0] == posicao4[0] or
+                                 posicao1[1] == posicao2[1] == posicao3[1] == posicao4[1]):
                             posicao_ocupada = False
-                            for posicao in self.__partida.oceano_jogador.posicoes_barcos.values():
-                                if posicao == posicoes:
+                            for posicoes2 in self.__partida.oceano_jogador.posicoes_barcos.values():
+                                if posicao1 in posicoes2 or posicao2 in posicoes2 or posicao3 in posicoes2 or posicao4 in \
+                                        posicoes2:
                                     posicao_ocupada = True
                             if posicao_ocupada:
                                 self.__tela_partida.mostrar_mensagem("Posicão ocupada.")
                             else:
-                                self.__partida.add_barco_oceano(self.__partida.embarcacoes_jogador[contador], posicoes)
+                                self.__partida.add_barco_oceano(self.__partida.embarcacoes_jogador[7],
+                                                                posicoes)
                                 break
-                    else:
-                        self.__tela_partida.mostrar_mensagem("Posição fornecida é inválida.")
-            contador += 1
-
-    def add_submarino(self):
-        contador = 3
-        while True:
-            if contador == 5:
-                break
-            else:
-                while True:
-                    dados = self.mostrar_oceano_add_embarcacoes("Submarino")
-                    posicoes = dados['posicao'].upper().split()
-                    if len(posicoes) == 2:
-                        condicao = True
-                        for posicao in posicoes:
-                            if posicao[0].isalpha() and posicao[1].isdigit():
-                                if self.__dict_posicao[
-                                     posicao[0]] >= self.__partida.oceano_jogador.tamanho_oceano or int(
-                                     posicao[1]) >= self.__partida.oceano_jogador.tamanho_oceano:
-                                    condicao = False
-                                    break
-                            else:
-                                condicao = False
-                                break
-                        if condicao:
-                            posicao1 = posicoes[0]
-                            posicao2 = posicoes[1]
-                            if abs(self.__dict_posicao[posicao1[0]] - self.__dict_posicao[posicao2[0]]) <= 1 and \
-                                    abs(int(posicao1[1]) - int(posicao2[1])) <= 1:
-                                posicao_ocupada = False
-                                for posicoes2 in self.__partida.oceano_jogador.posicoes_barcos.values():
-                                    if posicao1 in posicoes2 or posicao2 in posicoes2:
-                                        posicao_ocupada = True
-                                if posicao_ocupada:
-                                    self.__tela_partida.mostrar_mensagem("Posicão ocupada.")
-                                else:
-                                    self.__partida.add_barco_oceano(self.__partida.embarcacoes_jogador[contador],
-                                                                    posicoes)
-                                    break
-                            else:
-                                self.__tela_partida.mostrar_mensagem("Posição fornecida é inválida.")
                         else:
-                            self.__tela_partida.mostrar_mensagem("Posição fornecida é inválida.")
+                            raise PosicaoInvalidaEception
                     else:
-                        self.__tela_partida.mostrar_mensagem("Posição fornecida é inválida.")
-            contador += 1
-
-    def add_fragata(self):
-        contador = 5
-        while True:
-            if contador == 7:
-                break
-            else:
-                while True:
-                    dados = self.mostrar_oceano_add_embarcacoes("Fragata")
-                    posicoes = dados['posicao'].upper().split()
-                    if len(posicoes) == 3:
-                        condicao = True
-                        for posicao in posicoes:
-                            if posicao[0].isalpha() and posicao[1].isdigit():
-                                if self.__dict_posicao[
-                                     posicao[0]] >= self.__partida.oceano_jogador.tamanho_oceano or int(
-                                     posicao[1]) >= self.__partida.oceano_jogador.tamanho_oceano:
-                                    condicao = False
-                                    break
-                            else:
-                                condicao = False
-                                break
-                        if condicao:
-                            posicao1 = posicoes[0]
-                            posicao2 = posicoes[1]
-                            posicao3 = posicoes[2]
-                            if abs(self.__dict_posicao[posicao1[0]] - self.__dict_posicao[posicao2[0]]) <= 1 and \
-                                    abs(int(posicao1[1]) - int(posicao2[1])) <= 1 and \
-                                    abs(self.__dict_posicao[posicao2[0]] - self.__dict_posicao[posicao3[0]]) <= 1 and \
-                                    abs(int(posicao2[1]) - int(posicao3[1])) <= 1 and \
-                                    (posicao1[0] == posicao2[0] == posicao3[0] or posicao1[1] == posicao2[1] ==
-                                     posicao3[1]):
-                                posicao_ocupada = False
-                                for posicoes2 in self.__partida.oceano_jogador.posicoes_barcos.values():
-                                    if posicao1 in posicoes2 or posicao2 in posicoes2 or posicao3 in posicoes2:
-                                        posicao_ocupada = True
-                                if posicao_ocupada:
-                                    self.__tela_partida.mostrar_mensagem("Posicão ocupada.")
-                                else:
-                                    self.__partida.add_barco_oceano(self.__partida.embarcacoes_jogador[contador],
-                                                                    posicoes)
-                                    break
-                            else:
-                                self.__tela_partida.mostrar_mensagem("Posição fornecida é inválida.")
-                        else:
-                            self.__tela_partida.mostrar_mensagem("Posição fornecida é inválida.")
-                    else:
-                        self.__tela_partida.mostrar_mensagem("Posição fornecida é inválida.")
-            contador += 1
-
-    def add_porta_avioes(self):
-        while True:
-            dados = self.mostrar_oceano_add_embarcacoes("Porta Avioes")
-            posicoes = dados['posicao'].upper().split()
-            if len(posicoes) == 4:
-                condicao = True
-                for posicao in posicoes:
-                    if posicao[0].isalpha() and posicao[1].isdigit():
-                        if self.__dict_posicao[
-                             posicao[0]] >= self.__partida.oceano_jogador.tamanho_oceano or int(
-                             posicao[1]) >= self.__partida.oceano_jogador.tamanho_oceano:
-                            condicao = False
-                            break
-                    else:
-                        condicao = False
-                        break
-                if condicao:
-                    posicao1 = posicoes[0]
-                    posicao2 = posicoes[1]
-                    posicao3 = posicoes[2]
-                    posicao4 = posicoes[3]
-                    if abs(self.__dict_posicao[posicao1[0]] - self.__dict_posicao[posicao2[0]]) <= 1 and \
-                            abs(int(posicao1[1]) - int(posicao2[1])) <= 1 and \
-                            abs(self.__dict_posicao[posicao2[0]] - self.__dict_posicao[posicao3[0]]) <= 1 and \
-                            abs(int(posicao2[1]) - int(posicao3[1])) <= 1 and \
-                            abs(self.__dict_posicao[posicao3[0]] - self.__dict_posicao[posicao4[0]]) <= 1 and \
-                            abs(int(posicao3[1]) - int(posicao4[1])) <= 1 and \
-                            (posicao1[0] == posicao2[0] == posicao3[0] == posicao4[0] or
-                             posicao1[1] == posicao2[1] == posicao3[1] == posicao4[1]):
-                        posicao_ocupada = False
-                        for posicoes2 in self.__partida.oceano_jogador.posicoes_barcos.values():
-                            if posicao1 in posicoes2 or posicao2 in posicoes2 or posicao3 in posicoes2 or posicao4 in \
-                                    posicoes2:
-                                posicao_ocupada = True
-                        if posicao_ocupada:
-                            self.__tela_partida.mostrar_mensagem("Posicão ocupada.")
-                        else:
-                            self.__partida.add_barco_oceano(self.__partida.embarcacoes_jogador[7],
-                                                            posicoes)
-                            break
-                    else:
-                        self.__tela_partida.mostrar_mensagem("Posição fornecida é inválida.")
+                        raise PosicaoInvalidaEception
                 else:
-                    self.__tela_partida.mostrar_mensagem("Posição fornecida é inválida.")
-            else:
-                self.__tela_partida.mostrar_mensagem("Posição fornecida é inválida.")
+                    raise PosicaoInvalidaEception
+        except PosicaoInvalidaEception:
+            self.__tela_partida.mostrar_mensagem("Posição Inválida")
 
     def add_embarcacoes(self):
         self.add_bote()
@@ -508,19 +526,22 @@ class ControladorPartida:
                 self.__controlador_sistema.abre_tela()
                 return
             if self.__jogador is not None:
-                if self.__jogador.senha == dados["senha"]:
-                    tamanho_oceano = int(dados["tamanho_oceano"])
-                    if 10 >= tamanho_oceano >= 7:
-                        if isinstance(self.__jogador, Jogador) and isinstance(tamanho_oceano, int):
-                            self.__partida = Partida(self.__jogador, tamanho_oceano)
-                            self.add_embarcacoes_teste()
-                            self.add_embarcacoes_maquina()
-                            self.continuar_partida_teste()
-                            break
+                try:
+                    if self.__jogador.senha == dados["senha"]:
+                        tamanho_oceano = int(dados["tamanho_oceano"])
+                        if 10 >= tamanho_oceano >= 7:
+                            if isinstance(self.__jogador, Jogador) and isinstance(tamanho_oceano, int):
+                                self.__partida = Partida(self.__jogador, tamanho_oceano)
+                                self.add_embarcacoes_teste()
+                                self.add_embarcacoes_maquina()
+                                self.continuar_partida_teste()
+                                break
+                        else:
+                            self.__tela_partida.mostrar_mensagem("Tamanho do oceano inválido.")
+                            return
                     else:
-                        self.__tela_partida.mostrar_mensagem("Tamanho do oceano inválido.")
-                        return
-                else:
+                        raise SenhaErradaException
+                except SenhaErradaException:
                     self.__tela_partida.mostrar_mensagem("Senha inválida.")
                     return
             else:
