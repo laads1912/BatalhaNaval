@@ -66,6 +66,8 @@ class ControladorPartida:
 
     def atirar(self):
         posicao = self.mostrar_oceanos()
+        if posicao is None:
+            self.__controlador_sistema.abre_tela()
         dados = posicao['posicao'].upper()
         while True:
             if len(dados) == 2 and dados[0].isalpha and dados[1].isdigit():
@@ -226,6 +228,8 @@ class ControladorPartida:
             else:
                 while True:
                     dados = self.mostrar_oceano_add_embarcacoes("Bote")
+                    if dados is None:
+                        self.__controlador_sistema.abre_tela()
                     posicoes = dados['posicao'].upper()
                     if len(posicoes) == 2 and posicoes[0].isalpha() and posicoes[1].isdigit():
                         if self.__dict_posicao[posicoes[0]] >= self.__partida.oceano_jogador.tamanho_oceano or int(
@@ -253,6 +257,8 @@ class ControladorPartida:
             else:
                 while True:
                     dados = self.mostrar_oceano_add_embarcacoes("Submarino")
+                    if dados is None:
+                        self.__controlador_sistema.abre_tela()
                     posicoes = dados['posicao'].upper().split()
                     if len(posicoes) == 2:
                         condicao = True
@@ -297,6 +303,8 @@ class ControladorPartida:
             else:
                 while True:
                     dados = self.mostrar_oceano_add_embarcacoes("Fragata")
+                    if dados is None:
+                        self.__controlador_sistema.abre_tela()
                     posicoes = dados['posicao'].upper().split()
                     if len(posicoes) == 3:
                         condicao = True
@@ -341,6 +349,8 @@ class ControladorPartida:
     def add_porta_avioes(self):
         while True:
             dados = self.mostrar_oceano_add_embarcacoes("Porta Avioes")
+            if dados is None:
+                self.__controlador_sistema.abre_tela()
             posicoes = dados['posicao'].upper().split()
             if len(posicoes) == 4:
                 condicao = True

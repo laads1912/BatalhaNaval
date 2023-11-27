@@ -111,7 +111,9 @@ class ControladorJogador:
                             self.__tela_jogador.mostrar_mensagem("Opção inválida")
                             return
                         elif opcao == 'Nome':
-                            jogador_temp.nome = self.__tela_jogador.alterar_nome()
+                            novo_nome = self.__tela_jogador.alterar_nome()
+                            self.__jogador_DAO.update(jogador_temp.nome, 'nome', novo_nome)
+                            jogador_temp.nome = novo_nome
                             self.__tela_jogador.mostrar_mensagem("Nome alterado com sucesso!")
                             return
                         elif opcao == 'Senha':
