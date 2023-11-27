@@ -133,6 +133,32 @@ class ControladorJogador:
                         else:
                             raise SenhaErradaException
                     except SenhaErradaException:
+                    if jogador_temp.senha == dados["senha"]:
+                        lista_opcoes = {"nome": 1, "senha": 2, "data_nascimento": 3, "retornar": 0}
+                        opcao = self.__tela_jogador.opcoes_alterar_cadastro()
+                        if opcao is None:
+                            return
+                        if opcao == "":
+                            self.__tela_jogador.mostrar_mensagem("Opção inválida")
+                            return
+                        elif opcao == 'Nome':
+                            novo_nome = self.__tela_jogador.alterar_nome()
+                            self.__jogador_DAO.update(jogador_temp.nome, 'nome', novo_nome)
+                            jogador_temp.nome = novo_nome
+                            self.__tela_jogador.mostrar_mensagem("Nome alterado com sucesso!")
+                            return
+                        elif opcao == 'Senha':
+                            jogador_temp.senha = self.__tela_jogador.alterar_senha()
+                            self.__tela_jogador.mostrar_mensagem("Senha alterada com sucesso!")
+                            return
+                        elif opcao == 'Data de nascimento':
+                            jogador_temp.data_nascimento = self.__tela_jogador.alterar_data_nascimento()
+                            self.__tela_jogador.mostrar_mensagem("Data de nascimento alterada com sucesso!")
+                            return
+                        else:
+                            self.__tela_jogador.mostrar_mensagem("Opção inválida")
+                            return
+                    else:
                         self.__tela_jogador.mostrar_mensagem("Senha inválida.")
                         return
                 else:
