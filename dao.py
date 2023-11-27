@@ -8,7 +8,7 @@ class DAO(ABC):
         self.__cache = {}
         try:
             self.__load()
-        except FileNotFoundError:
+        except Exception:
             self.__dump()
 
     def __dump(self):
@@ -30,6 +30,19 @@ class DAO(ABC):
     def remove(self, key):
         try:
             self.__cache.pop(key)
+            self.__dump()
+        except KeyError:
+            pass
+
+    def update(self, key, attribute_name, new_value):
+        try:
+            obj = self.__cache[key]
+            if attribute_name == 'partida':
+                obj.add_partida(new_value)
+            elif attribute_name == 'pontuacao':
+                obj.add_pontuacao(new_value)
+            else:
+                setattr(obj, attribute_name, new_value)
             self.__dump()
         except KeyError:
             pass

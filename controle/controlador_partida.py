@@ -28,6 +28,7 @@ class ControladorPartida:
                                                      "cadastrados!")
                 self.__controlador_sistema.abre_tela()
                 return
+
             if self.__jogador is not None:
                 if self.__jogador.senha == dados["senha"]:
                     tamanho_oceano = int(dados["tamanho_oceano"])
@@ -529,8 +530,8 @@ class ControladorPartida:
     def continuar_partida_teste(self):
         while True:
             if self.__final_partida == "0":
-                self.__jogador.add_partida(self.__partida)
-                self.__jogador.add_pontuacao(self.__partida.pontuacao)
+                self.__controlador_sistema.controlador_jogador.add_partida(self.__jogador.nome, self.__partida)
+                self.__controlador_sistema.controlador_jogador.add_pontuacao(self.__jogador.nome, self.__partida.pontuacao)
                 self.__final_partida = "1"
                 return self.__controlador_sistema.abre_tela()
             if self.__jogada == "1":

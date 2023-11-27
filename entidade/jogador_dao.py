@@ -14,6 +14,10 @@ class JogadorDAO(DAO):
                 and isinstance(jogador, Jogador)):
             super().add(jogador.nome, jogador)
 
+    def update(self, key: str, attribute_name: str, new_value):
+        if isinstance(key, str) and isinstance(attribute_name, str):
+            super().update(key, attribute_name, new_value)
+
     def get(self, key: str):
         if isinstance(key, str):
             return super().get(key)

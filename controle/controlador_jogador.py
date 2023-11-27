@@ -18,10 +18,15 @@ class ControladorJogador:
         return None
 
     def add_jogador(self):
+        jogadores = self.__jogador_DAO.get_all()
         while True:
             dados = self.__tela_jogador.pegar_dados_jogador()
             if dados is None:
                 return
+            for jogador_temp in jogadores:
+                if jogador_temp.nome == dados["nome"]:
+                    self.__tela_jogador.mostrar_mensagem("Jogador já cadastrado.")
+                    return
             jogador_temp = Jogador(dados["nome"], dados["senha"], dados["data_nascimento"])
             if dados["nome"] != "" and dados["senha"] != "" and dados["data_nascimento"]:
                 self.__jogador_DAO.add(jogador_temp)
@@ -51,16 +56,17 @@ class ControladorJogador:
             ranking = []
             while len(jogadores_temp) != 0:
                 maior_pontuacao = 0
-                melhor_jogador = 0
-                for j in jogadores_temp:
-                    if j.pontuacao >= maior_pontuacao:
-                        melhor_jogador = j
+                melhor_jogador = None
+                for jogador_temp in jogadores_temp:
+                    if jogador_temp.pontuacao >= maior_pontuacao:
+                        melhor_jogador = jogador_temp
+                        maior_pontuacao = jogador_temp.pontuacao
                 ranking.append(melhor_jogador)
                 jogadores_temp.remove(melhor_jogador)
 
             contador = len(jogadores)
             self.__tela_jogador.mostrar_mensagem("----- RANKING -----")
-            for jogador_temp in ranking:
+            for jogador_temp in ranking[::-1]:
                 self.__tela_jogador.mostrar_mensagem(f'{contador} - {jogador_temp.nome} -> Pontuação: {jogador_temp.pontuacao}')
                 contador -= 1
 
@@ -163,3 +169,9 @@ class ControladorJogador:
                 funcao_escolhida()
             else:
                 self.__tela_jogador.mostrar_mensagem("Opção inválida")
+
+    def add_partida(self, nome, partida):
+        self.__jogador_DAO.update(nome, 'partida', partida)
+
+    def add_pontuacao(self, nome, ponto):
+        self.__jogador_DAO.update(nome, 'pontuacao', ponto)
